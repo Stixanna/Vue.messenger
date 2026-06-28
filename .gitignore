@@ -1,0 +1,37 @@
+# dependencies
+node_modules/
+
+# build output
+dist/
+
+# logs
+*.log
+npm-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# editor
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+
+# env files
+*.local
+.env.local
+.env.*.local
+
+# build cache
+*.tsbuildinfo
+.eslintcache
+
+# cypress
+cypress/videos/
+cypress/screenshots/
+
+# vitest
+__screenshots__/
+
+# vite
+*.timestamp-*-*.mjs
