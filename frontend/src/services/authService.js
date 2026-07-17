@@ -2,14 +2,16 @@
 
 const API_URL = 'http://localhost:8000';
 
-async function request(url, body) {
+async function request(url, options = {}) {
 	const response = await fetch(`${API_URL}${url}`, {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json',
-		},
-		body: JSON.stringify(body),
-	});
+		...options,
+        credentials: 'include',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        method: options.method ?? 'GET',
+        body: options.body ? JSON.stringify(options.body) : {},
+    });
 
 	let data = null;
 
@@ -21,8 +23,8 @@ async function request(url, body) {
 
 	if (!response.ok) {
 		throw new Error(
+			data?.detail[0].msg ||
 			data?.detail ||
-			data?.message ||
 			'Ошибка запроса'
 		);
 	}
@@ -31,17 +33,17 @@ async function request(url, body) {
 }
 
 export async function login(username, password) {
-	return request('/api/auth/login', {
+	return request('/api/auth/login', {method: 'POST', body: {
 		username,
 		password,
-	});
+	}});
 }
 
 export async function setup2fa(username, password) {
-	return request('/api/auth/2fa/setup', {
+	return request('/api/auth/2fa/setup', {method: 'POST', body: {
 		username,
 		password,
-	});
+	}});
 }
 
 export async function verify2faSetup(
@@ -49,11 +51,11 @@ export async function verify2faSetup(
 	password,
 	otp,
 ) {
-	return request('/api/auth/2fa/setup', {
+	return request('/api/auth/2fa/setup', {method: 'POST', body: {
 		username,
 		password,
-		otp,
-	});
+        otp,
+	}});
 }
 
 export async function verify2faLogin(
@@ -61,9 +63,9 @@ export async function verify2faLogin(
 	password,
 	otp,
 ) {
-	return request('/api/auth/2fa/login', {
+	return request('/api/auth/2fa/login', {method: 'POST', body: {
 		username,
 		password,
-		otp,
-	});
+        otp,
+	}});
 }
