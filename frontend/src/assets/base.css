@@ -1,86 +1,247 @@
-/* color palette from <https://github.com/vuejs/theme> */
+/* Root vars */
 :root {
-  --vt-c-white: #ffffff;
-  --vt-c-white-soft: #f8f8f8;
-  --vt-c-white-mute: #f2f2f2;
 
-  --vt-c-black: #181818;
-  --vt-c-black-soft: #222222;
-  --vt-c-black-mute: #282828;
+  --font-size: 16px;
+  --border-radius-default: 0.75rem;
+  --max-opacity: .6;
+  --padding-horizontal: calc(var(--height) + 3px - var(--border-width));
 
-  --vt-c-indigo: #2c3e50;
 
-  --vt-c-divider-light-1: rgba(60, 60, 60, 0.29);
-  --vt-c-divider-light-2: rgba(60, 60, 60, 0.12);
-  --vt-c-divider-dark-1: rgba(84, 84, 84, 0.65);
-  --vt-c-divider-dark-2: rgba(84, 84, 84, 0.48);
+  --white: #ffffff;
+  --red: #E85252;
+  --orange: #E8AC52;
+  --yellow: #EFF257;
+  --green: #5BD350;
+  --blue: #5094D3;
+  --purple: #9A50D3;
+  --pink: #D3507F;
+  --black: #000000;
 
-  --vt-c-text-light-1: var(--vt-c-indigo);
-  --vt-c-text-light-2: rgba(60, 60, 60, 0.66);
-  --vt-c-text-dark-1: var(--vt-c-white);
-  --vt-c-text-dark-2: rgba(235, 235, 235, 0.64);
+  --blue-color-light: #1798CF;
+  --blue-color-medium: #097aaa;
+  --blue-color-dark: #005980;
+
+  --purple-color-light: #8773e3;
+  /* --purple-color-medium: #7865ca;
+  --purple-color-dark: #4f4388; */
+  
+  --color-default-shadow: rgb(16, 16, 16, 0.612);
+  --border-color: #0f0f0f;
+
+  --primary-color-dark: #8774e1;
+  --input-search-border-color-dark: #2f2f2f;
+  --base-color-dark: #181818;
+  --secondary-color-dark: #212121;
+  --secondary-bright-color-dark: #333;
+  --tertiary-color-dark: var(--black); 
+  --text-color-dark:var(--white);
+  --message-background-color-dark:var(--purple-color-light);
+  --input-color-dark: #585858;
+  --avatar-color-dark: rgb(135,116,225);
+  --message-time-color-dark: rgba(255, 255, 255, .9); 
+  --scrollable-color-dark: rgba(255, 255, 255, .2);
+  --highlight-color-dark: var(--input-color-dark);
+  --tag-badge-color-dark: #373737;
+  --shared-tag-badge-color-dark: var(--purple);
+  --notify-badge-color-dark: #e41515;
+  --reactions-bg-color-dark:#585858c3;
+  --user-not-accepted-invite-dark: rgba(255, 255, 255, .5);
+
+  --input-search-border-color-light:#cccdce;
+  --primary-color-light: #3390ed;
+  --base-color-light:#d1d3d3;
+  --secondary-color-light:var(--white);
+  --secondary-bright-color-light: #e4e4e4;
+  --tertiary-color-light: #d4d88e;
+  --text-color-light:#282B2C;
+  --message-background-color-light:#e4fee1;
+  --input-color-light:#9e9e9e;
+  --avatar-color-light: #3390ed;
+  --message-time-color-light: rgb(79, 174, 78, 1); 
+  --scrollable-color-light: rgba(0, 0, 0, .2);
+  --highlight-color-light: rgb(79, 174, 78, 1); 
+  --tag-badge-color-light: #9e9e9e;
+  --shared-tag-badge-color-light: var(--purple);
+  --notify-badge-color-light: #ff6e6e;
+  --reactions-bg-color-light: #b8b8b8;
+  --user-not-accepted-invite-light: rgba(0, 0, 0, .5);
+  
+
+  --input-search-border-color:var(--input-search-border-color-light);
+  --primary-color: var(--primary-color-light);
+  --base-color: var(--base-color-light);
+  --secondary-color: var(--secondary-color-light);
+  --secondary-bright-color: var(--secondary-bright-color-light);
+  --tertiary-color: var(--tertiary-color-light);
+  --text-color: var(--text-color-light);
+  --input-color: var(--input-color-light);
+  --message-background-color: var(--message-background-color-light);
+  --avatar-color: var(--avatar-color-light);
+  --message-time-color: var(--message-time-color-light);
+  --scrollable-color: var(--scrollable-color-light);
+  --highlight-color: var(--highlight-color-light);
+  --notify-badge-color: var(--notify-badge-color-light);
+  --reactions-bg-color:var(--reactions-bg-color-light);
+  --user-not-accepted-invite:var(--user-not-accepted-invite-light);
+  --tag-badge-color: var(--tag-badge-color-light);
+  --shared-tag-badge-color: var(--shared-tag-badge-color-light);
+}
+/* Color variables - dark vars */
+:root.dark {
+  --input-search-border-color:var(--input-search-border-color-dark);
+  --primary-color: var(--primary-color-dark);
+  --base-color: var(--base-color-dark);
+  --secondary-color: var(--secondary-color-dark);
+  --secondary-bright-color: var(--secondary-bright-color-dark);
+  --tertiary-color: var(--tertiary-color-dark);
+  --text-color: var(--text-color-dark);
+  --input-color: var(--input-color-dark);
+  --message-background-color: var(--message-background-color-dark);
+  --avatar-color: var(--avatar-color-dark);
+  --message-time-color: var(--message-time-color-dark);
+  --scrollable-color: var(--scrollable-color-dark);
+  --highlight-color: var(--highlight-color-dark);
+  --tag-badge-color: var(--tag-badge-color-dark);
+  --shared-tag-badge-color: var(--shared-tag-badge-color-dark);
+  --notify-badge-color: var(--notify-badge-color-dark);
+  --reactions-bg-color:var(--reactions-bg-color-dark);
+  --user-not-accepted-invite:var(--user-not-accepted-invite-dark);
 }
 
-/* semantic color variables for this project */
-:root {
-  --color-background: var(--vt-c-white);
-  --color-background-soft: var(--vt-c-white-soft);
-  --color-background-mute: var(--vt-c-white-mute);
 
-  --color-border: var(--vt-c-divider-light-2);
-  --color-border-hover: var(--vt-c-divider-light-1);
-
-  --color-heading: var(--vt-c-text-light-1);
-  --color-text: var(--vt-c-text-light-1);
-
-  --section-gap: 160px;
-}
-
-@media (prefers-color-scheme: dark) {
+@media (prefers-color-scheme: light) {
   :root {
-    --color-background: var(--vt-c-black);
-    --color-background-soft: var(--vt-c-black-soft);
-    --color-background-mute: var(--vt-c-black-mute);
-
-    --color-border: var(--vt-c-divider-dark-2);
-    --color-border-hover: var(--vt-c-divider-dark-1);
-
-    --color-heading: var(--vt-c-text-dark-1);
-    --color-text: var(--vt-c-text-dark-2);
+    --base-color:var(--base-color-light);
+    --secondary-color:var(--secondary-color-light);
+    --secondary-bright-color:var(--secondary-bright-color-light);
+    --tertiary-color: var(--tertiary-color-light);
+    --text-color:var(--text-color-light);
+    --avatar-color:var(--avatar-color-light);
+    --message-time-color: var(--message-time-color-light); 
+    --scrollable-color: var(--scrollable-color-light);
+    --highlight-color: var(--highlight-color-light);
   }
 }
+
+
+/* General styles */
 
 *,
 *::before,
 *::after {
+  font-family: Arial, sans-serif;
   box-sizing: border-box;
   margin: 0;
   font-weight: normal;
 }
 
+/* Стили полосы прокрутки */
+::-webkit-scrollbar {
+  width: 5px; 
+  height: 5px; 
+}
+::-webkit-scrollbar-thumb {
+  background-color: var(--scrollable-color);
+  border-radius: 4px; 
+  transition: opacity .1s ease-in-out;
+}
+::-webkit-scrollbar-track {
+  background: none; 
+}
+
 body {
-  min-height: 100vh;
-  color: var(--color-text);
-  background: var(--color-background);
-  transition:
-    color 0.5s,
-    background-color 0.5s;
-  line-height: 1.6;
-  font-family:
-    Inter,
-    -apple-system,
-    BlinkMacSystemFont,
-    'Segoe UI',
-    Roboto,
-    Oxygen,
-    Ubuntu,
-    Cantarell,
-    'Fira Sans',
-    'Droid Sans',
-    'Helvetica Neue',
-    sans-serif;
-  font-size: 15px;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: var(--base-color);
+  height: 100vh;
+  color: var(--text-color);
+  font-size: 16px;
+}
+textarea {
+  box-shadow: none !important; 
+  appearance: none; 
+  outline: none; 
+}
+input {
+  border: none;
+  background-color: var(--secondary-color);
+  color:var(--text-color);
+  transition: border-color 0.2s ease-in-out; 
+  box-shadow: none !important; 
+  appearance: none; 
+  outline: none; 
+}
+input:focus {
+  outline: 2px solid var(--primary-color);
+}
+input:not(:focus):hover {
+  border-color: var(--primary-color);
+}
+/* readonly - disabled analog with click handle */
+input[readonly] {
+  opacity: .6;
+  cursor: not-allowed;
+}
+input[type="checkbox" i] {
+  margin: 0;
+}
+
+select {
+  background-color: var(--secondary-color);
+  color:var(--text-color);
+  border: none;
+  text-align: center;
+  font-size: var(--font-size);
+  max-height: 150px;
+  overflow-y: auto;
+  appearance: none; 
+  outline: none; 
+  transition: border-color 0.2s ease-in-out; 
+}
+select:focus {
+  outline: 2px solid var(--primary-color);
+}
+select:not(:focus):hover {
+  border-color: var(--primary-color);
+}
+select option {
+  background-color:var(--secondary-bright-color);
+  text-align: left; 
+  padding: 10px; 
+  font-size: 16px;
+  border-radius: 5%;
+  color: var(--text-color);
+  height: 15px;
+}
+
+button {
+  background-color: var(--blue-color-medium);
+  color:var(--text-color);
+  font-size: var(--font-size);
+  border: none;
+}
+
+/* base settings for a */
+a,
+a:link,  
+a:visited,  
+a:focus,  
+a:hover,  
+a:active {
+  color: var(--text-color);
+  font-style: italic;
+  text-decoration: none;
+}
+
+a.button {
+  font-size: 1.2rem;
+  text-decoration: none;
+  padding: 0.25rem 1rem;
+  margin-inline: 0.5rem;
+  background: var(--blue); 
+  border: 1px solid var(--text-color);
+}
+a.button:hover {
+  background: var(--blue-color-light);
 }
