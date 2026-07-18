@@ -2,6 +2,7 @@
 @import './styles/base.css';
 @import './styles/layout.css';
 
+@import './fonts/tgico-icons.css';
 
 #app {
   width: 100%;
