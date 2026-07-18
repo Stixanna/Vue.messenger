@@ -18,51 +18,27 @@ const props = defineProps({
     default: true,
   },
 });
-
 </script>
 
-
 <template>
-  <div id="column-center">
+<div
+  id="column-center">
 
-    <div class="chat-background">
-      <div class="chat-theme-overlay" />
-    </div>
+  <ActiveRoom
+    v-if="currentRoom"
+    :room="currentRoom"
+    :messages="messages"
+    :show-input="showInput" />
 
-    <ActiveRoom
-      v-if="currentRoom"
-      :room="currentRoom"
-      :messages="messages"
-      :show-input="showInput"
-    />
-
-  </div>
+</div>
 </template>
 
 <style scoped>
-
-.chat-background {
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  background-image: url('../../assets/chat-background.jpg');
-  background-size: cover;
-  background-position: center;
-  pointer-events: none;
-}
-.chat-theme-overlay {
-  position: absolute;
-  inset: 0;
-  background-color: var(--tertiary-color);
-  opacity: 0.96;
-  pointer-events: none;
-}
-
 #column-center {
   --border-radius-messages: 0.9375rem;
   --messages-container-width: 43rem;
-  --right-column-width:26.5rem;
-  --chat-input-padding:.8125rem;
+  --right-column-width: 26.5rem;
+  --chat-input-padding: .8125rem;
 }
 
 #column-center {
@@ -72,5 +48,4 @@ const props = defineProps({
   flex-direction: column;
   align-items: center;
 }
-
 </style>
