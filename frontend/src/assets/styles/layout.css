@@ -1,0 +1,71 @@
+#Main.left-column-open:not(.right-column-open) #column-center,
+#Main.right-column-open:not(.left-column-open) #column-center {
+  width: calc(100% - var(--sidebar-width));
+}
+
+#Main.left-column-open.right-column-open #column-center {
+  max-width: calc(100% - var(--sidebar-width));
+}
+
+@media only screen and (max-width: 1310px) {
+
+  #Main.left-column-open:not(.right-column-open) #column-center,
+  #Main.right-column-open:not(.left-column-open) #column-center {
+    max-width: calc(100%);
+  }
+}
+
+/* медиа для мобильной версии чата */
+
+@media only screen and (max-width: 1000px) {
+
+  #Main {
+    --layer-transition: 500ms cubic-bezier(0.33, 1, 0.68, 1);
+  }
+
+  #Main.left-column-open #column-center {
+    transform: translate3d(20.25rem, 0, 0);
+  }
+
+  #Main.right-column-open #column-center {
+    width: 100%;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  #Main.left-column-open #column-center {
+    width: 648px !important;
+    transform: translate3d(38.5rem, 0, 0);
+  }
+
+  #Main.left-column-open #column-left {
+    width: 100% !important;
+  }
+
+  #Main.right-column-open #column-right {
+    width: 100% !important;
+  }
+}
+
+@media only screen and (max-width: 1310px) {
+
+  #Main.left-column-open:not(.right-column-open) #column-center,
+  #Main.right-column-open:not(.left-column-open) #column-center {
+    max-width: calc(100% - var(--sidebar-width));
+  }
+}
+
+@media only screen and (max-width: 1000px) {
+
+  #Main.left-column-open:not(.right-column-open) #column-center,
+  #Main.right-column-open:not(.left-column-open) #column-center {
+    max-width: 100%;
+    width: 100%;
+  }
+}
+
+@media only screen and (min-width: 1310px) {
+  #Main.left-column-open.right-column-open #column-center {
+    max-width: calc(100% - var(--sidebar-width) - 324px);
+  }
+}

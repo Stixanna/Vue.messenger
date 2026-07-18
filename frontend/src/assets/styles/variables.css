@@ -1,0 +1,127 @@
+/* Root vars */
+:root {
+
+  --font-size: 16px;
+  --border-radius-default: 0.75rem;
+  --max-opacity: .6;
+  --padding-horizontal: calc(var(--height) + 3px - var(--border-width));
+  --sidebar-width: 324px;
+  --btn-size: 2.5rem;
+
+
+  --white: #ffffff;
+  --red: #E85252;
+  --orange: #E8AC52;
+  --yellow: #EFF257;
+  --green: #5BD350;
+  --blue: #5094D3;
+  --purple: #9A50D3;
+  --pink: #D3507F;
+  --black: #000000;
+
+  --blue-color-light: #1798CF;
+  --blue-color-medium: #097aaa;
+  --blue-color-dark: #005980;
+
+  --purple-color-light: #8773e3;
+  /* --purple-color-medium: #7865ca;
+  --purple-color-dark: #4f4388; */
+
+  --color-default-shadow: rgb(16, 16, 16, 0.612);
+  --border-color: #0f0f0f;
+
+  --primary-color-dark: #8774e1;
+  --input-search-border-color-dark: #2f2f2f;
+  --base-color-dark: #181818;
+  --secondary-color-dark: #212121;
+  --secondary-bright-color-dark: #333;
+  --tertiary-color-dark: var(--black);
+  --text-color-dark: var(--white);
+  --message-background-color-dark: var(--purple-color-light);
+  --input-color-dark: #585858;
+  --avatar-color-dark: rgb(135, 116, 225);
+  --message-time-color-dark: rgba(255, 255, 255, .9);
+  --scrollable-color-dark: rgba(255, 255, 255, .2);
+  --highlight-color-dark: var(--input-color-dark);
+  --tag-badge-color-dark: #373737;
+  --shared-tag-badge-color-dark: var(--purple);
+  --notify-badge-color-dark: #e41515;
+  --reactions-bg-color-dark: #585858c3;
+  --user-not-accepted-invite-dark: rgba(255, 255, 255, .5);
+
+  --input-search-border-color-light: #cccdce;
+  --primary-color-light: #3390ed;
+  --base-color-light: #d1d3d3;
+  --secondary-color-light: var(--white);
+  --secondary-bright-color-light: #e4e4e4;
+  --tertiary-color-light: #d4d88e;
+  --text-color-light: #282B2C;
+  --message-background-color-light: #e4fee1;
+  --input-color-light: #9e9e9e;
+  --avatar-color-light: #3390ed;
+  --message-time-color-light: rgb(79, 174, 78, 1);
+  --scrollable-color-light: rgba(0, 0, 0, .2);
+  --highlight-color-light: rgb(79, 174, 78, 1);
+  --tag-badge-color-light: #9e9e9e;
+  --shared-tag-badge-color-light: var(--purple);
+  --notify-badge-color-light: #ff6e6e;
+  --reactions-bg-color-light: #b8b8b8;
+  --user-not-accepted-invite-light: rgba(0, 0, 0, .5);
+
+
+  --input-search-border-color: var(--input-search-border-color-light);
+  --primary-color: var(--primary-color-light);
+  --base-color: var(--base-color-light);
+  --secondary-color: var(--secondary-color-light);
+  --secondary-bright-color: var(--secondary-bright-color-light);
+  --tertiary-color: var(--tertiary-color-light);
+  --text-color: var(--text-color-light);
+  --input-color: var(--input-color-light);
+  --message-background-color: var(--message-background-color-light);
+  --avatar-color: var(--avatar-color-light);
+  --message-time-color: var(--message-time-color-light);
+  --scrollable-color: var(--scrollable-color-light);
+  --highlight-color: var(--highlight-color-light);
+  --notify-badge-color: var(--notify-badge-color-light);
+  --reactions-bg-color: var(--reactions-bg-color-light);
+  --user-not-accepted-invite: var(--user-not-accepted-invite-light);
+  --tag-badge-color: var(--tag-badge-color-light);
+  --shared-tag-badge-color: var(--shared-tag-badge-color-light);
+}
+
+/* Color variables - dark vars */
+:root.dark {
+  --input-search-border-color: var(--input-search-border-color-dark);
+  --primary-color: var(--primary-color-dark);
+  --base-color: var(--base-color-dark);
+  --secondary-color: var(--secondary-color-dark);
+  --secondary-bright-color: var(--secondary-bright-color-dark);
+  --tertiary-color: var(--tertiary-color-dark);
+  --text-color: var(--text-color-dark);
+  --input-color: var(--input-color-dark);
+  --message-background-color: var(--message-background-color-dark);
+  --avatar-color: var(--avatar-color-dark);
+  --message-time-color: var(--message-time-color-dark);
+  --scrollable-color: var(--scrollable-color-dark);
+  --highlight-color: var(--highlight-color-dark);
+  --tag-badge-color: var(--tag-badge-color-dark);
+  --shared-tag-badge-color: var(--shared-tag-badge-color-dark);
+  --notify-badge-color: var(--notify-badge-color-dark);
+  --reactions-bg-color: var(--reactions-bg-color-dark);
+  --user-not-accepted-invite: var(--user-not-accepted-invite-dark);
+}
+
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --base-color: var(--base-color-light);
+    --secondary-color: var(--secondary-color-light);
+    --secondary-bright-color: var(--secondary-bright-color-light);
+    --tertiary-color: var(--tertiary-color-light);
+    --text-color: var(--text-color-light);
+    --avatar-color: var(--avatar-color-light);
+    --message-time-color: var(--message-time-color-light);
+    --scrollable-color: var(--scrollable-color-light);
+    --highlight-color: var(--highlight-color-light);
+  }
+}
