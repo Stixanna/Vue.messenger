@@ -5,15 +5,17 @@ import ColumnRight from '@/components/layout/ColumnRight.vue';
 </script>
 
 <template>
-  <div class="whole page-chats">
-    <div id="Main" class="app-container">
-      <ColumnLeft />
-      <ColumnCenter />
-      <ColumnRight />
-    </div>
+  <div id="Main" class="app-container">
+    <ColumnLeft />
+    <ColumnCenter />
+    <ColumnRight />
   </div>
 </template>
 
 <style scoped>
-
+.app-container {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+}
 </style>
