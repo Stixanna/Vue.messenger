@@ -1,5 +1,17 @@
 <script setup lang="ts">
 import { RouterView } from 'vue-router'
+// import { setTheme, getTheme } from 'vue-router'
+// import { requestNotifications } from 'vue-router'
+
+// setTheme(getTheme());
+// requestNotifications();
+
+// // Возможно нужно возможно нет надо подумать (composable useViewport())
+// updateLayoutForMobile(null, true);
+// // Дорендер который был ранее, удалить, заменить компонентами
+// renderIndexElements()
+// // Следует разнести по компонентам/composable при создании
+// addIndexListeners();
 </script>
 
 <template>

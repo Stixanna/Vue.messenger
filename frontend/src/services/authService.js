@@ -5,14 +5,14 @@ import {
 } from '@/services/api';
 
 export async function login(username, password) {
-	return apiRequest('/api/auth/login', {method: 'POST', body: {
+	return apiRequest('/auth/login', {method: 'POST', body: {
 		username,
 		password,
 	}});
 }
 
 export async function setup2fa(username, password) {
-	return apiRequest('/api/auth/2fa/setup', {method: 'POST', body: {
+	return apiRequest('/auth/2fa/setup', {method: 'POST', body: {
 		username,
 		password,
 	}});
@@ -23,7 +23,7 @@ export async function verify2faSetup(
 	password,
 	otp,
 ) {
-	return apiRequest('/api/auth/2fa/setup', {method: 'POST', body: {
+	return apiRequest('/auth/2fa/setup', {method: 'POST', body: {
 		username,
 		password,
         otp,
@@ -35,7 +35,7 @@ export async function verify2faLogin(
 	password,
 	otp,
 ) {
-	return apiRequest('/api/auth/2fa/login', {method: 'POST', body: {
+	return apiRequest('/auth/2fa/login', {method: 'POST', body: {
 		username,
 		password,
         otp,

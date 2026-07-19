@@ -1,7 +1,14 @@
 <script setup>
+import { onMounted } from 'vue';
 import ColumnLeft from '@/components/layout/ColumnLeft.vue';
 import ColumnCenter from '@/components/layout/ColumnCenter.vue';
 import ColumnRight from '@/components/layout/ColumnRight.vue';
+import { initializeChat } from '@/bootstrap/initializeChat';
+
+onMounted(async () => {
+    await initializeChat();
+});
+
 </script>
 
 <template>

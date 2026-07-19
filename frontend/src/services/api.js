@@ -1,11 +1,12 @@
 
-const API_URL = 'http://localhost:8000';
+import { BASE_URL } from '@/config';
+
 
 export async function apiRequest(url, options = {}) {
 	let response;
 
 	try {
-		response = await fetch(`${API_URL}${url}`, {
+		response = await fetch(`${BASE_URL}${url}`, {
 			credentials: 'include',
 
 			method: options.method ?? 'GET',
