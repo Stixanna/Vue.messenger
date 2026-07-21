@@ -4,21 +4,25 @@ import { loadCurrentInfo } from '@/services/dataLoaders/loadCurrentInfo';
 import { notifyIfRequired } from '@/globalUIMethods/notifyIfRequired';
 import { startConnectionErrorNotify, stopConnectionErrorNotify } from '@/globalUIMethods/connectionErrorNotify';
 
-// import { datalistAddOption, datalistRemoveOption, datalistUpdateOption } from '@/global/datalistUpdateMethods';
-// import { getSelectedRoom } from '../vars/stores/selectedRoomStore';
-// import { rerenderRoomList } from '../chat/renderers/rerenderRoomList';
-// import { getRoomById, getRooms } from '../vars/stores/roomsStore';
-// import { renderRoom } from '../chat/renderers/renderRoom';
+// import { useRoomsStore } from '@/stores/roomsStore';
+// import { useTagsStore } from '@/stores/tagsStore';
+
 // import { addRoomTag, getTags, removeRoomTag, updateTagName } from '../vars/stores/tagsStore';
+// import { getRoomById, getRooms } from '../vars/stores/roomsStore';
+// import { datalistAddOption, datalistRemoveOption, datalistUpdateOption } from '@/global/datalistUpdateMethods';
+// import { rerenderRoomList } from '../chat/renderers/rerenderRoomList';
+// import { renderRoom } from '../chat/renderers/renderRoom';
 // import { renderEditableInputRow } from '../sidebar/elements/renderEditableInputRow';
 // import { addEditableInputButtonsListeners } from '../listeners/editableInputHandlers/addEditableInputButtonsListeners';
-// import { processMessageEvent } from './handlers/messageHandlers';
-// import { emit } from '../uiEvents/uiEventBus';
 // import { updateRoomListWithData } from '../chat/renderers/updateRoomListWithData';
-// import { processRoomEvent } from './handlers/roomHandlers';
-// import { processCallEvent } from './handlers/callHandlers';
-// import { processStatusEvent } from './handlers/statusHandlers';
-// import { processInviteEvent } from './handlers/inviteHandlers';
+
+import { emit } from '@/services/uiEventBus';
+
+import { processMessageEvent } from './handlers/messageHandlers';
+import { processRoomEvent } from './handlers/roomHandlers';
+import { processCallEvent } from './handlers/callHandlers';
+import { processStatusEvent } from './handlers/statusHandlers';
+import { processInviteEvent } from './handlers/inviteHandlers';
 
 // import { getCurrentLanguage } from '../vars/stores/currentLanguageStore';
 
@@ -150,15 +154,16 @@ function setupSSE( is_initial ) {
 async function refreshAllData() { 
     await loadCurrentInfo();
     
-    const selected_room = getSelectedRoom();
-    if (selected_room) {
-        // Передаем только значение не мутируя объект в getSelectedRoom()
-        await renderRoom({
-            ...selected_room,
-            details: null,
-            is_cached_input: true,
-        });
-    }
+    // const roomsStore = useRoomsStore();
+    // const selected_room = roomsStore.getSelectedRoom();  // Выбранная сейчас комната
+    // if (selected_room) {
+    //     // Передаем только значение не мутируя объект в getSelectedRoom()
+    //     await renderRoom({
+    //         ...selected_room,
+    //         details: null,
+    //         is_cached_input: true,
+    //     });
+    // }
 }
 
 /**
@@ -167,8 +172,8 @@ async function refreshAllData() {
  */
 async function handleSSEData(data) {
     console.log('📨 Пришло сообщение SSE:', data);  // debug
-    // обработка данных
-    const selected_room = getSelectedRoom();  // Выбранная сейчас комната
+    // const roomsStore = useRoomsStore();
+    // const selected_room = roomsStore.getSelectedRoom();  // Выбранная сейчас комната
 
     const notificatedEvents = ['message-min','invite','call'];
     if(notificatedEvents.includes(data.type)){

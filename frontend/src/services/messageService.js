@@ -5,5 +5,5 @@ import {
 } from '@/services/api';
 
 export async function FetchMessageInfo(message_id) {
-	return apiRequest(`message/get_by_id/?message_id=${message_id}`, { method: 'GET' });
+	return apiRequest(`/message/get_by_id/?message_id=${message_id}`, { method: 'GET' });
 }

@@ -1,5 +1,4 @@
 import { FetchRoomDetails } from '@/services/roomService';
-import { debugVars } from '../../vars/debug/debugVars';
 
 
 // Метод фетча деталей комнаты
