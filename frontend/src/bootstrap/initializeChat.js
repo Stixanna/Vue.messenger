@@ -17,7 +17,11 @@ import { sseEventListener } from "@/services/sseEventListener/sseEventListenerSe
  */
 export async function initializeChat() {
     // Получаем всю актуальную информацию
-    await loadCurrentInfo();
+    try {
+        await loadCurrentInfo();
+    } catch (error) {
+        console.error('Error while receiving current data:', error)
+    }
 
     // Запускаем слушатели событий
     sseEventListener(true);
