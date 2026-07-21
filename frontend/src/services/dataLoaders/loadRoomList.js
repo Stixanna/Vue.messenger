@@ -1,20 +1,13 @@
 import { useRoomsStore } from '@/stores/roomsStore';
 import { useTagsStore } from '@/stores/tagsStore';
 import { useKeywordsStore } from '@/stores/keywordsStore';
+import { useSettingsStore } from '@/stores/settingsStore';
 
 import { FetchRooms } from '@/services/roomService';
-
 
 import { formatRelativeTime } from '@/services/utils/formatRelativeTime';
 
 // import { getSelectedRoom } from '../../vars/stores/selectedRoomStore';
-
-// import { getRooms, setRooms } from '../../vars/stores/roomsStore';
-// import { setKeywords } from '../../vars/stores/kwStore';
-// import { setTags } from '../../vars/stores/tagsStore';
-
-// import { getIsRoomsResortedFlag } from '../../vars/stores/cachedSortingOrderStore';
-
 
 
 /**
@@ -24,6 +17,8 @@ export async function loadRoomList() {
   const roomsStore = useRoomsStore();
   const tagsStore = useTagsStore();
   const keywordsStore = useKeywordsStore();
+  const settingsStore = useSettingsStore();
+
   let rawRooms, allTags, allKeywords = [];
 
   const currentRooms = roomsStore.rooms;
@@ -62,14 +57,9 @@ export async function loadRoomList() {
   //         room.selected = true;
   // }
 
-  // // Сортировка комнат по времени последнего сообщения
-  // const sortingOrderReversed = getIsRoomsResortedFlag();
-  // if(sortingOrderReversed){
-  //     rooms.sort((b, a) => new Date(b.timestamp) - new Date(a.timestamp));
-  // }
-  // else {
-  rooms.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-  // }
+  // Сортировка комнат по времени последнего сообщения
+  const sortingOrderReversed = settingsStore.isRoomsResorted;
+  rooms.sort(sortingOrderReversed ? (b, a) : (a, b) => new Date(b.timestamp) - new Date(a.timestamp));
 
   roomsStore.setRooms(rooms);
   tagsStore.setTags(allTags);
