@@ -2,7 +2,14 @@
 import { BASE_URL } from '@/config';
 
 
-export async function apiRequest(url, options = {}) {
+export async function apiRequest(
+			url: string,
+			options: {
+				method?: string, 
+				headers?: any, 
+				body?: any
+			},
+		): Promise<any> {
 	let response;
 
 	try {
