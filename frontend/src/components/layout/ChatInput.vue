@@ -1,12 +1,27 @@
-<script>
-// Пока без пропсов, позже будет требоваться разное отображение в зависимости от наличия текста в textarea
-// defineProps({
-//   room: {
-//     type: Object,
-//     required: true,
-//   },
-// });
+<script setup>
+import { computed } from 'vue';
+import ScheduledMessagesButton from './ScheduledMessagesButton.vue';
+import AttachmentAddButton from './AttachmentAddButton.vue';
+import SendButton from './SendButton.vue';
 
+const props = defineProps({
+  room: {
+    type: Object,
+    required: true,
+  },
+  inputValue: {
+    type: String,
+    default: ''
+  }
+});
+
+const showScheduledButton = computed(() => {
+  return (
+    props.room &&
+    props.room.delayed_messages > 0 &&
+    props.inputValue === ''
+  );
+});
 </script>
 
 <template>
@@ -22,12 +37,12 @@
       <div
         id="chat-input-buttons"
         class="chat-input-buttons">
-        <div
-          id="attach-button"
-          class="attach-button"
-          title="Attach file">
-          <button class="rp btn-icon tgico icon-skrepka"/>
-        </div>
+
+        <ScheduledMessagesButton
+          v-if="showScheduledButton" />
+
+        <AttachmentAddButton />
+
       </div>
       <textarea 
         id="message-input" 
@@ -36,17 +51,10 @@
         autocomplete="off" 
         maxlength="1000" 
         placeholder="Write a message..." 
-        data-scroll-element="true">
-      </textarea>
+        data-scroll-element="true" />
     </div>
-    <div
-      class="send-button-container">
-      <div
-        id="send-button"
-        class="send-button btn-container">
-        <button class="inner tgico icon-send"/>
-      </div>
-    </div>
+
+    <SendButton />
   </div>
 </div>
 </template>

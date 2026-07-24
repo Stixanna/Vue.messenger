@@ -5,8 +5,6 @@ import { loadRoomList } from "@/services/dataLoaders/loadRoomList";
 import { useUsersStore } from '@/stores/usersStore';
 import { useInvitesStore } from '@/stores/invitesStore';
 
-// import { initializeRoomList } from "../../chat/initializeRoomList";
-
 
 /**
  * Метод загрузки информации при инициализации
@@ -16,17 +14,6 @@ import { useInvitesStore } from '@/stores/invitesStore';
  * @param {boolean} get_users - Получать ли список всех пользователей
  */
 export async function loadCurrentInfo( get_currentuser = true, get_rooms = true, get_invites = true, get_users = true ) {
-    // получаем список rooms, tags, keywords
-    if (get_rooms){
-        await loadRoomList();
-    }
-    // получаем инвайты
-    if (get_invites) {
-        const invitesStore = useInvitesStore();
-
-        const invites = await loadInvites();
-        invitesStore.setInvites(invites);
-    }
     // получаем список всех пользователей
     if (get_users) {
         await loadUsers();
@@ -39,5 +26,17 @@ export async function loadCurrentInfo( get_currentuser = true, get_rooms = true,
 
         const usersStore = useUsersStore();
         usersStore.markCurrentUser(curr_user_id);
+    }
+
+    // получаем список rooms, tags, keywords
+    if (get_rooms){
+        await loadRoomList();
+    }
+    // получаем инвайты
+    if (get_invites) {
+        const invitesStore = useInvitesStore();
+
+        const invites = await loadInvites();
+        invitesStore.setInvites(invites);
     }
 }

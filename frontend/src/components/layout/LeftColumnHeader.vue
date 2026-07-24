@@ -1,8 +1,8 @@
 <script setup>
 import { ref } from 'vue';
+import BurgerButton from '@/components/layout/BurgerButton.vue';
 import ChatListOptions from '@/components/layout/ChatListOptions.vue';
 import SearchInput from '@/components/SearchInput.vue';
-import BaseIcon from '@/components/BaseIcon.vue';
 
 const search = ref('');
 
@@ -32,21 +32,12 @@ const props = defineProps({
   <div
     class="sidebar-header-inner">
 
-    <div
-      id="menu_btn"
-      class="btn-container">
-      <BaseIcon class="btn-icon"
-        name="burger"
-        element="button"
-        package="tgico" 
-      />
-    </div>
+    <BurgerButton />
 
     <SearchInput
       v-model="search"
       @search="handleSearch"
-      @clear="clearSearch"
-    />
+      @clear="clearSearch" />
 
   </div>
 
@@ -55,7 +46,6 @@ const props = defineProps({
 </template>
 
 <style scoped>
-
 .sidebar-header {
   background-color: var(--secondary-color);
   min-height: 3.8rem;
@@ -84,5 +74,4 @@ const props = defineProps({
   gap: .4375rem;
   margin-bottom: .2rem;
 }
-
 </style>

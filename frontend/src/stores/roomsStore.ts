@@ -1,5 +1,7 @@
 import { computed, ref } from 'vue';
 import { defineStore } from 'pinia';
+import { loadRoomMessages } from '@/services/dataLoaders/loadRoomMessages';
+import { loadRoomDetails } from "@/services/dataLoaders/loadRoomDetails";
 import {
   useUsersStore,
   parsePayloadRoomRights,
@@ -8,6 +10,7 @@ import type {
   Tag,
   Keyword,
   Room,
+  RoomDetails,
 } from '@/types/rooms';
 
 
@@ -17,13 +20,30 @@ export const useRoomsStore = defineStore('rooms', () => {
    * State
    */
   const rooms = ref<Room[]>([]);
-
+  
   /**
    * Getters
    */
   const archivedRoom = computed(() =>
     rooms.value.find(room => room.is_archived),
   );
+
+  const selectedRoom = computed(() =>
+    rooms.value.find(room => room.selected),
+  );
+
+  const activeRoomId = ref<string | null>(
+    localStorage.getItem('active_room'),
+  );
+
+  function setActiveRoom(roomId: string): void {
+    activeRoomId.value = roomId;
+
+    localStorage.setItem(
+      'active_room',
+      roomId,
+    );
+  }
 
   /**
    * Actions
@@ -32,15 +52,52 @@ export const useRoomsStore = defineStore('rooms', () => {
     rooms.value = value;
   }
 
-  function getSelectedRoom(): Room | undefined {
-    return rooms.value.find(room => room.selected);
+  function markSelectedRoom(roomId: string): void {
+    rooms.value.forEach(room => {
+      room.selected = room.id === roomId;
+    });
   }
 
-  function markSelectedRoom(roomId: string): void {
-    rooms.value = rooms.value.map(room => ({
-        ...room,
-        selected: room.id === roomId,
-    }));
+  async function selectRoom(roomId: string): Promise<void> {
+
+    const room = getRoomById(roomId);
+
+    if (!room || room.selected) {
+      return;
+    }
+
+    markSelectedRoom(roomId);
+    setActiveRoom(roomId);
+    // setCachedRoomId(roomId);
+
+    if (!room.details) {
+      const details = await loadRoomDetails(room.id);
+
+      updateRoomDetails(room.id, details);
+    }
+
+    // Пока хендлеров для обновления кеша сообщений нет, всегда подгружаем их
+    // if (!room.messages) {
+      room.messages = await loadRoomMessages(
+        room.id,
+        'initial',
+      );
+    // }
+  }
+
+  async function restoreActiveRoom() {
+    if (!activeRoomId.value) {
+      return;
+    }
+
+    const room = getRoomById(activeRoomId.value);
+
+    if (!room) {
+      activeRoomId.value = null;
+      return;
+    }
+
+    await selectRoom(room.id);
   }
 
   function getRoomById(roomId: string): Room | undefined {
@@ -49,7 +106,7 @@ export const useRoomsStore = defineStore('rooms', () => {
 
   function updateRoomDetails(
     roomId: string,
-    details: Room['details'],
+    details: RoomDetails,
   ): void {
     if (!roomId || !details) {
       console.error('No required data');
@@ -110,9 +167,11 @@ export const useRoomsStore = defineStore('rooms', () => {
     rooms,
 
     archivedRoom,
+    activeRoomId,
+    selectedRoom,
 
-    getSelectedRoom,
-    markSelectedRoom,
+    restoreActiveRoom,
+    selectRoom,
     setRooms,
     getRoomById,
     updateRoomDetails,

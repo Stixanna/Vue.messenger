@@ -2,8 +2,8 @@
 import { computed } from 'vue';
 
 import { useSettingsStore } from '@/stores/settingsStore';
-import { getTextColor, } from '@/services/utils/getTextColor';
-import { renderAvatarInitials } from '@/services/utils/renderAvatarInitials';
+import { getTextColor, } from '@/utils/getTextColor';
+import { renderAvatarInitials } from '@/utils/renderAvatarInitials';
 
 
 const props = defineProps({

@@ -1,6 +1,10 @@
 import type {
   User,
 } from '@/types/users';
+import type { 
+  Message,
+} from './messages';
+
 
 /**
  * Последнее сообщение комнаты
@@ -59,4 +63,5 @@ export interface Room {
 
   selected: boolean;
   details?: RoomDetails;
+  messages?: Message[];
 }

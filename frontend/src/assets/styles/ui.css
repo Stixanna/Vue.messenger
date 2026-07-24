@@ -546,7 +546,7 @@
 }
 
 .message-list .sticky-date,
-.message-list .bubbles.system .system-message-wrapper {
+.message-list .bubbles .system-message-wrapper {
   text-align: center;
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -572,7 +572,7 @@
 }
 
 .message-list .sticky-date>span,
-.message-list .bubbles.system .system-message-wrapper>span {
+.message-list .bubbles .system-message-wrapper>span {
   background-color: var(--action-message-bg);
   color: var(--white);
   position: relative;
@@ -1718,9 +1718,8 @@
 /* Стили аватарки */
 
 .avatar {
+  --avatar-size: 3.375rem;
   --multiplier: .45;
-  width: var(--size) !important;
-  height: var(--size) !important;
   border-radius: 50%;
   background-image: linear-gradient(var(--white) -300%, var(--avatar-color));
   -webkit-user-select: none;
@@ -1739,7 +1738,7 @@
   --avatar-size: 2.5rem;
 }
 
-.chat-list .avatar {
+/* .chat-list .avatar {
   --avatar-size: 3.375rem;
 }
 
@@ -1749,7 +1748,7 @@
 
 .profile-avatars-container .avatar {
   --avatar-size: 7.5rem;
-}
+} */
 
 .bubble .avatar-wrapper {
   padding-right: .625rem;

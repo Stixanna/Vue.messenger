@@ -1,4 +1,4 @@
-import { updateRoomListWithData } from "@/services/utils/updateRoomListWithData";
+import { updateRoomListWithData } from "@/utils/updateRoomListWithData";
 import { useRoomsStore } from '@/stores/roomsStore';
 import { loadRoomDetails } from "@/services/dataLoaders/loadRoomDetails";
 

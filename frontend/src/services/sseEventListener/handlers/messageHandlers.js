@@ -1,4 +1,4 @@
-import { updateRoomListWithData } from "@/services/utils/updateRoomListWithData";
+import { updateRoomListWithData } from "@/utils/updateRoomListWithData";
 import { useUsersStore } from '@/stores/usersStore';
 import { useRoomsStore } from '@/stores/roomsStore';
 import { loadMessageInfo } from "@/services/dataLoaders/loadMessageInfo";
@@ -76,8 +76,8 @@ async function handleReceivedMessage(message) {
     const { attachments, from, is_delayed } = message;
     const usersStore = useUsersStore();
     const roomsStore = useRoomsStore();
-    const current_user = usersStore.getCurrentUser();
-    const selected_room = roomsStore.getSelectedRoom();
+    const current_user = usersStore.currentUser;
+    const selected_room = roomsStore.selectedRoom;
 
     const isOutgoing = current_user.id === from?.id ?? false;
     const wasSheduled = is_delayed;
@@ -111,7 +111,7 @@ async function handleReceivedMessage(message) {
 function handleDelayedMessageSent(message) {
     const { room_id } = message;
     const roomsStore = useRoomsStore();
-    const selected_room = roomsStore.getSelectedRoom();
+    const selected_room = roomsStore.selectedRoom;
 
     // Изменяем счетчик отложенных сообщений      
     const roomWithSheduledMessage = roomsStore.getRoomById(room_id);
@@ -142,7 +142,7 @@ async function handleMessageUpdate(message) {
 async function handleMessageDelete(message) {
     const { id } = message;
     const roomsStore = useRoomsStore();
-    const selected_room = roomsStore.getSelectedRoom();
+    const selected_room = roomsStore.selectedRoom;
 
     // Обновляем список комнат by server так как запросить информацию о сообщении невозможно
     await updateRoomListWithData();

@@ -1,6 +1,5 @@
 import { normalizeDataPayload } from "@/services/websocket/normalizeDataPayload";
-import { updateRoomListWithData } from "@/services/utils/updateRoomListWithData";
-
+import { updateRoomListWithData } from "@/utils/updateRoomListWithData";
 import { useRoomsStore } from '@/stores/roomsStore';
 import { useTagsStore } from '@/stores/tagsStore';
 

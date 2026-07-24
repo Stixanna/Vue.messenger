@@ -49,6 +49,10 @@ export const useUsersStore = defineStore('users', () => {
     }));
   }
 
+  const currentUser = computed(() =>
+    users.value.find(user => user.current === true),
+  );
+
   function getCurrentUser(): User | undefined {
     return users.value.find(user => user.current === true);
   }
@@ -107,8 +111,9 @@ export const useUsersStore = defineStore('users', () => {
     users,
 
     sortedUsers,
+    currentUser,
 
-    getCurrentUser,
+    // getCurrentUser,
     setUsers,
     markCurrentUser,
     getUserById,

@@ -2,10 +2,8 @@ import { useRoomsStore } from '@/stores/roomsStore';
 import { useTagsStore } from '@/stores/tagsStore';
 import { useKeywordsStore } from '@/stores/keywordsStore';
 import { useSettingsStore } from '@/stores/settingsStore';
-
 import { FetchRooms } from '@/services/roomService';
-
-import { formatRelativeTime } from '@/services/utils/formatRelativeTime';
+import { formatRelativeTime } from '@/utils/formatRelativeTime';
 
 // import { getSelectedRoom } from '../../vars/stores/selectedRoomStore';
 
@@ -51,19 +49,12 @@ export async function loadRoomList() {
       last_message: lastMsg,
     };
   });
-  // if(prevSelectedRoom){
-  //     const room = rooms.find(item => item.id === prevSelectedRoom.id);
-  //     if(room) 
-  //         room.selected = true;
-  // }
-
-  // Сортировка комнат по времени последнего сообщения
-  const sortingOrderReversed = settingsStore.isRoomsResorted;
-  rooms.sort(sortingOrderReversed ? (b, a) : (a, b) => new Date(b.timestamp) - new Date(a.timestamp));
 
   roomsStore.setRooms(rooms);
   tagsStore.setTags(allTags);
   keywordsStore.setKeywords(allKeywords);
+
+  await roomsStore.restoreActiveRoom();
 
   return rooms;
 }

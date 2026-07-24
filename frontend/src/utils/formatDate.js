@@ -1,4 +1,4 @@
-// import { getDateFormat } from '../vars/stores/dateFormatStore';
+import { useSettingsStore } from '@/stores/settingsStore';
 
 
 /**
@@ -23,11 +23,13 @@ export function formatDate( timestamp, is_readable_var ) {
         return '??.??';
     }
 
-    // const format = getDateFormat();
+    const settingsStore = useSettingsStore();
 
-    // if (format === 'iso') {
-    //     return formatDateIso(date);
-    // }
+    const format = settingsStore.dateFormat;
+
+    if (format === 'iso') {
+        return formatDateIso(date);
+    }
 
     const now = new Date();
 
@@ -93,19 +95,19 @@ function formatDateRu( date, is_weekday ) {
     return `${formatted_date}${is_weekday ? `, ${capitalized_weekday}` : ''}`;
 }
 
-// /**
-//  * Метод для преобразования даты в iso вид
-//  * @param {Date} date Дата 
-//  * @returns {string} Возвращает дату в формате iso
-//  */
-// function formatDateIso( date ) {
-//     const d = new Date(date);
+/**
+ * Метод для преобразования даты в iso вид
+ * @param {Date} date Дата 
+ * @returns {string} Возвращает дату в формате iso
+ */
+function formatDateIso( date ) {
+    const d = new Date(date);
 
-//     const day = String(d.getDate()).padStart(2, '0');
-//     const month = String(d.getMonth() + 1).padStart(2, '0');
-//     const year = d.getFullYear();
+    const day = String(d.getDate()).padStart(2, '0');
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const year = d.getFullYear();
 
-//     const formatted_date = `${year}-${month}-${day}`;
+    const formatted_date = `${year}-${month}-${day}`;
 
-//     return formatted_date;
-// }
+    return formatted_date;
+}

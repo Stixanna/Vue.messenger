@@ -1,4 +1,4 @@
-import { formatDate } from "@/services/utils/formatDate";
+import { formatDate } from "@/utils/formatDate";
 // import { getCurrentLanguage } from "../vars/stores/currentLanguageStore";
 
 
