@@ -78,7 +78,7 @@ const isFileMessage = computed(() => {
   :data-peer-id="message.from?.id ?? 'systemid'"
   :data-timestamp="message.timestamp"
   :data-is-forwarded="message.is_forwarded || null"
-  :data-read="message.is_read ? 'true' : null">
+  :data-read="message.is_read ? 'true' : 'false'">
 
   <template v-if="message.from">
 

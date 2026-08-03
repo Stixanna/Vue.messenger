@@ -46,6 +46,7 @@ const messages = computed(() => {
     :room="selectedRoom" />
 
   <MessageList
+    :room-id="selectedRoom.id"
     :messages="messages" />
 
   <ChatInput
