@@ -1,6 +1,7 @@
 /* Root vars */
 :root {
 
+  --menu-item-height: 50px;
   --font-size: 16px;
   --border-radius-default: 0.75rem;
   --max-opacity: .6;

@@ -42,34 +42,41 @@ function handleChange(event) {
 
 
 <template>
-  <div class="flex">
+<div class="flex">
 
-    <input
-      :id="id"
-      class="toggle-checkbox"
-      :class="{
-        'theme-checkbox': theme,
-      }"
-      type="checkbox"
-      :checked="modelValue"
-      @change="handleChange" />
+  <input
+    :id="id"
+    class="toggle-checkbox"
+    :class="{
+      'theme-checkbox': theme,
+    }"
+    type="checkbox"
+    :checked="modelValue"
+    @change="handleChange" />
 
 
-    <label
-      class="toggle_area"
-      :for="id">
+  <label
+    class="toggle_area"
+    :for="id">
 
-      <span class="moon">
-        {{ leftText }}
-      </span>
+    <span class="moon">
+      {{ leftText }}
+    </span>
 
-      <span class="sun">
-        {{ rightText }}
-      </span>
+    <span class="sun">
+      {{ rightText }}
+    </span>
 
-      <span class="toggle-ball" />
+    <span class="toggle-ball" />
 
-    </label>
+  </label>
 
-  </div>
+</div>
 </template>
+
+<style scoped>
+.menu-item .theme-checkbox,
+.menu-item .toggle_area {
+  pointer-events: auto;
+}
+</style>

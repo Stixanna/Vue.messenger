@@ -1,10 +1,21 @@
 <script setup>
-import { ref } from 'vue';
+import {
+  ref,
+  computed
+} from 'vue';
+import {
+  useInvitesStore
+} from '@/stores/invitesStore';
+import {
+  menuText
+} from '@/constants/menuText';
 import BurgerButton from '@/components/layout/BurgerButton.vue';
 import ChatListOptions from '@/components/layout/ChatListOptions.vue';
 import SearchInput from '@/components/SearchInput.vue';
+import ContextMenu from '@/components/menus/ContextMenu.vue';
 
 const search = ref('');
+const menuOpened = ref(false);
 
 function handleSearch(value) {
   console.log('search:', value);
@@ -13,6 +24,15 @@ function handleSearch(value) {
 function clearSearch() {
   console.log('search cleared');
 }
+
+function toggleMenu() {
+  menuOpened.value = !menuOpened.value;
+}
+
+function onItemSelect(item) {
+  console.log('clicked: ', item);
+}
+
 const props = defineProps({
   treeView: {
     type: Boolean,
@@ -24,6 +44,49 @@ const props = defineProps({
     default: false,
   },
 });
+
+const url = '';
+const invitesStore = useInvitesStore();
+
+const invites_count = computed(() => {
+  const count = invitesStore.getInvitesCount();
+  return count;
+});
+
+const menuItems = computed(() => [{
+    id: "createroom",
+    value: menuText.main.createRoom,
+    icon: 'docplus',
+  },
+  {
+    id: "contacts",
+    value: menuText.main.contacts,
+    icon: 'peoples',
+  },
+  {
+    id: "invites",
+    value: menuText.main.invites,
+    icon: 'envelope',
+    badge: invites_count
+  },
+  {
+    id: "settings",
+    value: menuText.main.settings,
+    icon: 'gear',
+  },
+  {
+    id: "theme",
+    value: menuText.main.theme,
+    icon: 'crescent',
+    type: "actionBar"
+  },
+  {
+    id: "",
+    value: menuText.main.footer,
+    href: url,
+    type: "footer"
+  },
+]);
 </script>
 
 <template>
@@ -32,7 +95,15 @@ const props = defineProps({
   <div
     class="sidebar-header-inner">
 
-    <BurgerButton />
+    <BurgerButton
+      @click="toggleMenu" />
+
+    <ContextMenu
+      name="context-menu"
+      :opened="menuOpened"
+      :items="menuItems"
+      @select="onItemSelect"
+      @close="menuOpened = false" />
 
     <SearchInput
       v-model="search"

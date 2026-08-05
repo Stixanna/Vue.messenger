@@ -1068,109 +1068,15 @@
 
 /* Базовый стиль для меню */
 
-.context-menu {
-  position: absolute;
-  pointer-events: auto;
-  color: var(--text-color);
-  overflow-y: auto;
-  overflow-x: hidden;
-  opacity: 0;
-  transform: translateX(-100%);
-  transition: opacity 0.3s ease, transform 0.3s ease;
-  /* Плавное появление */
-  max-width: var(--sidebar-width);
-  display: flex;
-  flex-direction: column;
-}
-
-.context-menu[type="message_menu"] {
-  gap: .5rem;
-  /* align-items: flex-start; */
-  align-items: center;
-}
-
-/* Когда меню отображается */
-.context-menu.open {
-  opacity: 1;
-  transform: translateX(0);
-  /* margin: 8px; */
-  top: 60px;
-}
-
-/* Анимация исчезновения */
-.context-menu.closing {
-  opacity: 0;
-  transform: translateX(-100%);
-}
-
 /* Оформление элементов меню */
-.menu-item {
-  padding: 15px;
-  border-bottom: 1px solid #444;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  user-select: none;
-  width: 100%;
+
+.sidebar-row-container-section #button_delete_room {
+  color: var(--red);
 }
 
 .reaction-selector {
   display: flex;
   justify-content: center;
-}
-
-.menu-item,
-.reaction-selector {
-  height: var(--menu-item-height);
-}
-
-.menu {
-  background-color: var(--secondary-bright-color);
-  border-radius: var(--border-radius-default);
-}
-
-.menu[data-position="0"] {
-  border-radius: 20px;
-}
-
-.menu-item * {
-  pointer-events: none;
-  user-select: none;
-}
-
-.menu-item .theme-checkbox,
-.menu-item .toggle_area {
-  pointer-events: auto;
-}
-
-.menu-item.pointer:hover {
-  opacity: 0.5;
-}
-
-.menu-item-icon {
-  width: 1.4rem;
-}
-
-.menu-item#leave_room,
-.menu-item#kick_from_room,
-.menu-item#logout,
-.sidebar-row-container-section #button_delete_room {
-  color: var(--red);
-}
-
-.menu-item#theme {
-  gap: 0.4rem;
-}
-
-.context-menu-footer {
-  font-size: 0.8rem;
-  width: 100%;
-  text-align: center;
-  text-decoration: none;
-  color: var(--input-color);
-}
-
-.reaction-selector {
   display: inline-flex;
   align-items: center;
   gap: 6px;
