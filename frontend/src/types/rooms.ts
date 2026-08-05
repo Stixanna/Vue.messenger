@@ -2,6 +2,7 @@ import type {
   User,
 } from '@/types/users';
 import type { 
+  Attachment,
   Message,
 } from './messages';
 
@@ -64,4 +65,5 @@ export interface Room {
   selected: boolean;
   details?: RoomDetails;
   messages?: Message[];
+  attachments?: Attachment[];
 }

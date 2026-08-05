@@ -36,3 +36,24 @@ export async function FetchInvites()
   : Promise<Invite[]> {
   return apiRequest('/room/invites', { method: 'GET' });
 }
+
+export async function FetchRoomAttachments(
+  roomId: string,
+  type?: string,
+  offset = 0,
+  limit = 10,
+) {
+  const query = new URLSearchParams({
+    room_id: String(roomId),
+    offset: String(offset),
+    limit: String(limit),
+  });
+
+  if (type) {
+    query.set('type', type);
+  }
+
+  return apiRequest(`/room/attachments/?${query.toString()}`, {
+    method: 'GET',
+  });
+}

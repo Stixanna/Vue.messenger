@@ -22,3 +22,13 @@ defineProps({
 
 </div>
 </template>
+
+<style scoped>
+.message-attachments {
+  display: flex;
+  flex-direction: column;
+  align-items:flex-end;
+  gap: 1px;
+  pointer-events: auto;
+}
+</style>

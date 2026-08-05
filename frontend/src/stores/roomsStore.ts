@@ -2,6 +2,7 @@ import { computed, ref } from 'vue';
 import { defineStore } from 'pinia';
 import { loadRoomMessages } from '@/services/dataLoaders/loadRoomMessages';
 import { loadRoomDetails } from "@/services/dataLoaders/loadRoomDetails";
+import { loadRoomAttachments } from '@/services/dataLoaders/loadRoomAttachments';
 import {
   useUsersStore,
   parsePayloadRoomRights,
@@ -12,6 +13,10 @@ import type {
   Room,
   RoomDetails,
 } from '@/types/rooms';
+import type {
+  Message,
+  Attachment,
+} from '@/types/messages';
 
 
 export const useRoomsStore = defineStore('rooms', () => {
@@ -75,6 +80,17 @@ export const useRoomsStore = defineStore('rooms', () => {
 
       updateRoomDetails(room.id, details);
     }
+    const init_attachments_count = 50
+
+    // Пока хендлеров для обновления кеша сообщений нет, всегда подгружаем их
+    // if (!room.attachments) {
+      room.attachments = await loadRoomAttachments(
+        room.id,
+        'img',
+        0,
+        init_attachments_count
+      );
+    // }
 
     // Пока хендлеров для обновления кеша сообщений нет, всегда подгружаем их
     // if (!room.messages) {
@@ -83,6 +99,33 @@ export const useRoomsStore = defineStore('rooms', () => {
         'initial',
       );
     // }
+    mergeMessageAttachments(room.messages, room.attachments);
+  }
+
+  function mergeMessageAttachments(
+    messages: Message[],
+    attachments: Attachment[],
+  ): void {
+    const attachmentsById = new Map(
+      attachments.map(attachment => [attachment.id, attachment]),
+    );
+
+    for (const message of messages) {
+      if (!message.attachments?.length) {
+        continue;
+      }
+
+      message.attachments = message.attachments.map(attachment => {
+        const fullAttachment = attachmentsById.get(attachment.id);
+
+        return fullAttachment
+          ? {
+              ...attachment,
+              ...fullAttachment,
+            }
+          : attachment;
+      });
+    }
   }
 
   async function restoreActiveRoom() {
