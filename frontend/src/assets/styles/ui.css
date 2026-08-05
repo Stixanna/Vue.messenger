@@ -251,11 +251,6 @@
   opacity: 0.7;
 }
 
-.sort-btn {
-  background-color: var(--background-color);
-}
-
-
 .chat-item .user-rights {
   --icon-size: 1rem;
   --font-size: 1rem;
@@ -937,10 +932,6 @@
 
 .forwarded-container .btn-container .btn-icon {
   --font-size: var(--font-size);
-}
-
-.sort-btn .btn-container .btn-icon {
-  --font-size: calc(var(--inner-size) * var(--multiplier));
 }
 
 .bubble #embedded-message-container .btn-container .btn-icon {

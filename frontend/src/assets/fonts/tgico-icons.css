@@ -6,7 +6,7 @@
   }
   
 .tgico {
-    font-family: 'tgico';
+    font-family: 'tgico' !important;
     font-style: normal;
     font-weight: normal;
     display: inline-block;

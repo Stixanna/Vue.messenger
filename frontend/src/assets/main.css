@@ -3,8 +3,8 @@
 @import './styles/layout.css';
 @import './styles/ui.css';
 
+@import 'lucide-static/font/lucide.css';
 @import './fonts/tgico-icons.css';
-@import './fonts/lucide.css';
 
 #app {
   width: 100%;

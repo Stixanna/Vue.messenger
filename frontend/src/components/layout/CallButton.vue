@@ -13,10 +13,10 @@ function handleClick() {
 
 <template>
 <div
-  class="btn-container-wrapper btn-container">
+  class="btn-container-wrapper btn-container btn-icon">
   <BaseIcon
     id="select_user_to_call"
-    class="btn-icon"
+    class=""
     name="call"
     element="div"
     package="tgico"

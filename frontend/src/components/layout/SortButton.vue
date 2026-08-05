@@ -26,12 +26,22 @@ function handleClick() {
     abs-bot-right 
     sort-btn">
   <div
-    class="btn-container">
+    class="btn-container btn-icon">
     <BaseIcon
-      class="btn-icon"
+      class=""
       :name="!orderToBot ? 'sort-to-bot' : 'sort-to-top'"
       element="div"
       package="tgico" />
   </div>
 </div>
 </template>
+
+<style scoped>
+.sort-btn {
+  font-size:2rem;
+  background-color: var(--background-color);
+}
+.sort-btn .btn-icon {
+  font-size:inherit;
+}
+</style>

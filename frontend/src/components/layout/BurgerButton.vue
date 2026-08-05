@@ -17,11 +17,11 @@ function handleClick() {
 <div
   @click="handleClick"
   id="menu_btn"
-  class="btn-container">
+  class="btn-container btn-icon">
   <BaseIcon
-    class="btn-icon"
+    class=""
     name="burger"
-    element="button"
+    element="div"
     package="tgico" />
 </div>
 </template>
