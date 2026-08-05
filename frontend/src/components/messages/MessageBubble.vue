@@ -141,7 +141,6 @@ const isFileMessage = computed(() => {
           <div
             class="metainfo">
 
-            <!-- temp commented with error -->
             <MessageReactions
               v-if="message.reactions?.length"
               :reactions="message.reactions"
@@ -204,3 +203,222 @@ const isFileMessage = computed(() => {
 
 </div>
 </template>
+
+<style scoped>
+
+.bubble #embedded-message-container,
+.bubble #forwarded-container {
+  --font-size: 0.8rem;
+  font-size: var(--font-size);
+}
+
+.bubble #forwarded-container span>span {
+  cursor: pointer;
+}
+
+.bubble {
+  --avatar-size: 2.5rem;
+  --message-text-size: 16px;
+  --messages-time-text-size: calc(var(--message-text-size) - 4px);
+  position: relative;
+  border-radius: inherit;
+  margin: 0.2rem;
+  align-self: flex-end;
+  color: var(--text-color);
+  overflow-wrap: break-word;
+  max-width: 100%;
+  display: flex;
+  align-items: flex-end;
+}
+
+.bubble.system {
+  justify-content: center;
+}
+
+.bubble.is-in {
+  flex-direction: row;
+}
+
+.bubble.is-out {
+  flex-direction: row-reverse;
+}
+
+.bubble.is-out .bubble-content {
+  background-color: var(--message-background-color);
+}
+
+.bubble.is-in .bubble-content {
+  background-color: var(--secondary-color);
+}
+
+.bubble-content {
+  --border-radius: .625rem;
+  min-width: 56px;
+  max-width: 100%;
+  border-start-start-radius: var(--border-radius);
+  border-start-end-radius: var(--border-radius);
+  border-end-start-radius: var(--border-radius);
+  border-end-end-radius: var(--border-radius);
+  box-shadow: 0 1px 2px #10232f26;
+  position: relative;
+}
+
+.bubble .message {
+  white-space: pre-wrap;
+  pointer-events: auto;
+}
+
+.bubble-content-wrapper,
+.bubble-content,
+.message {
+  user-select: text;
+}
+
+.bubble .message,
+.bubble .message-title-wrapper {
+  margin: 4px 8px 5px;
+  max-width: 100%;
+  word-break: break-word;
+  position: relative;
+}
+
+.bubble .message.no-text {
+  margin: 0 8px;
+}
+
+.bubble .message.no-text.file {
+  height: 1.75rem;
+}
+
+.bubble::before,
+.bubble.system::before {
+  content: "";
+  position: absolute;
+  top: -0.1875rem;
+  bottom: -0.1875rem;
+  left: -50vw;
+  right: -50vw;
+  background: var(--highlight-color);
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.bubble.highlighted::before {
+  opacity: 0.3;
+}
+
+.message-title-wrapper {
+  user-select: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.bubble .message-title-wrapper {
+  pointer-events: auto;
+}
+
+.message-title {
+  font-weight: bold;
+  color: var(--avatar-color);
+  cursor: pointer;
+}
+
+.bubble-content-wrapper {
+  display: flex;
+  flex-direction: column;
+  pointer-events: none;
+}
+
+.bubble.is-in .bubble-content-wrapper {
+  max-width: min(calc(var(--max-content-width) - (var(--avatar-size) / 2)), 100%, var(--messages-container-width));
+}
+
+.bubble.is-out .bubble-content-wrapper {
+  max-width: min(var(--max-content-width, 100%), var(--messages-container-width));
+}
+
+.bubble.is-out .time-inner {
+  margin-inline-end: -2px;
+}
+
+.bubble .time-inner {
+  pointer-events: all;
+  position: relative;
+  inset-inline-end: 0;
+  display: flex;
+  align-items: center;
+  line-height: 1;
+  padding: inherit;
+  white-space: nowrap;
+  height: var(--messages-time-text-size);
+  visibility: visible;
+  color: var(--message-time-color);
+  bottom: 5px;
+}
+
+:root:not(.dark) .bubble.is-in .time-inner {
+  color: var(--text-color);
+}
+
+.bubble .no-text .time-inner {
+  position: absolute;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  padding: 0.5rem 0.1rem;
+  border-radius: var(--border-radius);
+  color: var(--white);
+}
+
+.bubble .no-text.file .time-inner {
+  color: var(--message-time-color);
+}
+
+.bubble .no-text .time-inner .background {
+  position: absolute;
+  height: 100%;
+  width: 108%;
+  z-index: -1;
+  opacity: 0.3;
+  background: black;
+  border-radius: var(--border-radius);
+}
+
+.bubble .no-text.file .time-inner .background {
+  background: none;
+}
+
+.bubble .time {
+  visibility: hidden;
+  font-size: var(--messages-time-text-size);
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  line-height: 1;
+  vertical-align: middle;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  justify-content: flex-end;
+  z-index: 1;
+  cursor: pointer;
+  margin-inline-start: .1875rem;
+  direction: ltr;
+  float: right;
+}
+
+.metainfo {
+  float: right;
+  user-select: none;
+}
+
+.bubble .message.with-reactions .metainfo {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+
+</style>

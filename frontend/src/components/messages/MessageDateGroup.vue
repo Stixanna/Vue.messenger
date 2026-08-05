@@ -28,3 +28,22 @@ defineProps({
 
 </div>
 </template>
+
+<style scoped>
+
+.message-list .sticky-date {
+  --middle-header-panes-height: 0px;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  pointer-events: none;
+  opacity: 1;
+  transition: opacity .3s ease;
+  z-index: 1;
+}
+
+.message-list .sticky-date {
+  position: sticky;
+  top: calc(.625rem);
+}
+
+</style>

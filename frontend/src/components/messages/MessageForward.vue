@@ -46,3 +46,18 @@ function handleUsernameClick() {
   </span>
 </div>
 </template>
+
+<style scoped>
+
+.forwarded-container .btn-container,
+.forwarded-container span {
+  pointer-events: none;
+}
+
+.bubble #forwarded-container span>span {
+  cursor: pointer;
+}
+.forwarded-container span>.forwarded-name {
+  pointer-events: auto;
+}
+</style>

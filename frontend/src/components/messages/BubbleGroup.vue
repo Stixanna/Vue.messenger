@@ -24,3 +24,20 @@ defineProps({
 
 </div>
 </template>
+
+<style scoped>
+.bubbles {
+  width: 100%;
+  flex: 1 1 auto;
+  position: relative;
+  z-index: 0;
+}
+
+.bubbles {
+  margin-block: 0.75rem;
+}
+
+.bubbles.system {
+  padding-block: 0.75rem;
+}
+</style>

@@ -51,3 +51,12 @@ const preparedReactions = computed(() => {
 
 </div>
 </template>
+
+<style scoped>
+.message.with-reactions .message-reactions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-block: .5rem;
+}
+</style>

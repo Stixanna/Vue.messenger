@@ -117,3 +117,18 @@ watch(
   </div>
 </div>
 </template>
+
+<style scoped>
+.message-list {
+  --max-content-width: min(100% - var(--chat-input-padding) * 2, var(--messages-container-width) * 2);
+  --action-message-bg: #0A0A0A8C;
+  --message-text-size: 16px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  margin-bottom: .5rem;
+  justify-content: flex-end;
+  max-width: min(100% - var(--chat-input-padding) * 2, var(--messages-container-width) * 2);
+}
+</style>

@@ -63,3 +63,46 @@ const classes = computed(() => ({
 
 </div>
 </template>
+
+<style scoped>
+.message-reaction {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-width: 22px;
+  height: 20px;
+  padding: 1rem 6px;
+
+  border-radius: 12px;
+
+  font-size: 14px;
+  line-height: 1;
+
+  background: rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+
+  transition:
+    background-color 120ms ease,
+    transform 120ms ease;
+}
+
+.message-reaction:hover {
+  background: rgba(0, 0, 0, 0.12);
+  transform: translateY(-1px);
+}
+
+.bubble.is-out .message-reaction.is-own {
+  background: var(--message-time-color);
+}
+
+.message-reaction.is-own {
+  background: var(--primary-color);
+}
+
+.message-reaction-emoji {
+  height: 0.5rem;
+  margin-bottom: .15rem;
+  pointer-events: none;
+}
+</style>

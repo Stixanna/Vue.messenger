@@ -70,3 +70,9 @@ function handleClick() {
 
 </div>
 </template>
+
+<style scoped>
+.attachment-item {
+  cursor: pointer;
+}
+</style>
