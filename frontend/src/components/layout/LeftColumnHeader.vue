@@ -47,11 +47,6 @@ const props = defineProps({
 const url = '';
 const invitesStore = useInvitesStore();
 
-const invites_count = computed(() => {
-  const count = invitesStore.getInvitesCount();
-  return count;
-});
-
 const menuItems = computed(() => [{
     id: "createroom",
     value: menuText.main.createRoom,
@@ -66,7 +61,7 @@ const menuItems = computed(() => [{
     id: "invites",
     value: menuText.main.invites,
     icon: 'envelope',
-    badge: invites_count
+    badge: invitesStore.getInvitesCount()
   },
   {
     id: "settings",

@@ -44,7 +44,7 @@ function initRowClick(item) {
 <div
   v-if="!item.type || item.type === 'sidebar_open'"
   :id="item.id"
-  class="menu-item pointer"
+  class="menu-item nowrap pointer"
   :type="item.type"
   @click="initRowClick(item)">
   <div
@@ -62,7 +62,9 @@ function initRowClick(item) {
 
   </div>
 
-  <span v-if="item.badge" class="badge">
+  <span 
+    v-if="item.badge != null && item.badge !== 0"
+    class="badge">
     {{ item.badge }}
   </span>
 
@@ -71,7 +73,7 @@ function initRowClick(item) {
 <div
   v-else-if="item.type === 'actionBar'"
   :id="item.id"
-  class="menu-item">
+  class="menu-item gapped nowrap">
   <div
     class="flex">
 
@@ -138,7 +140,7 @@ function initRowClick(item) {
   color: var(--red);
 }
 
-.menu-item#theme {
+.menu-item.gapped {
   gap: 0.4rem;
 }
 
