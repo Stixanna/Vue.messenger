@@ -99,7 +99,7 @@ const menuItems = computed(() => [{
       @click="toggleMenu" />
 
     <ContextMenu
-      name="context-menu"
+      name="slide-from-left"
       :opened="menuOpened"
       :items="menuItems"
       @select="onItemSelect"

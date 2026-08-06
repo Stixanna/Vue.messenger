@@ -24,7 +24,7 @@ function handleItemClick(item) {
 
 <template>
 <Transition
-  name="context-menu"
+  name="slide-from-left"
   appear>
   <div
     v-if="opened"
@@ -57,21 +57,21 @@ function handleItemClick(item) {
   align-items: center;
 }
 
-.context-menu-enter-active,
-.context-menu-leave-active {
+.slide-from-left-enter-active,
+.slide-from-left-leave-active {
   transition:
     opacity .3s ease,
     transform .3s ease;
 }
 
-.context-menu-enter-from,
-.context-menu-leave-to {
+.slide-from-left-enter-from,
+.slide-from-left-leave-to {
   opacity: 0;
   transform: translateX(-100%);
 }
 
-.context-menu-enter-to,
-.context-menu-leave-from {
+.slide-from-left-enter-to,
+.slide-from-left-leave-from {
   opacity: 1;
   transform: translateX(0);
 }
