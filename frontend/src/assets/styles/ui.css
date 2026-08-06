@@ -320,16 +320,6 @@
   --bg-color: var(--purple);
 }
 
-#menu_btn .badge {
-  position: absolute;
-  left: 1.5rem;
-  bottom: 0.3rem;
-  font-size: 10px;
-  padding: 2px;
-  text-align: center;
-  pointer-events: none;
-}
-
 .menu-item .badge {
   opacity: 1;
   pointer-events: none;

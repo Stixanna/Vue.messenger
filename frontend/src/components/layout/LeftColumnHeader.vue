@@ -12,7 +12,6 @@ import {
 import BurgerButton from '@/components/layout/BurgerButton.vue';
 import ChatListOptions from '@/components/layout/ChatListOptions.vue';
 import SearchInput from '@/components/SearchInput.vue';
-import ContextMenu from '@/components/menus/ContextMenu.vue';
 
 const search = ref('');
 const menuOpened = ref(false);
@@ -96,19 +95,16 @@ const menuItems = computed(() => [{
     class="sidebar-header-inner">
 
     <BurgerButton
-      @click="toggleMenu" />
-
-    <ContextMenu
-      name="slide-from-left"
-      :opened="menuOpened"
       :items="menuItems"
       @select="onItemSelect"
-      @close="menuOpened = false" />
+      @click="toggleMenu" 
+    />
 
     <SearchInput
       v-model="search"
       @search="handleSearch"
-      @clear="clearSearch" />
+      @clear="clearSearch" 
+    />
 
   </div>
 

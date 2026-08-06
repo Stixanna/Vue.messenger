@@ -29,7 +29,8 @@ function handleItemClick(item) {
   <div
     v-if="opened"
     class="context-menu menu"
-    style="z-index: 2;">
+    style="z-index: 2;"
+    @click.stop>
     <MenuItem
       v-for="item in items"
       :key="item.id"
@@ -42,11 +43,13 @@ function handleItemClick(item) {
 <style scoped>
 .context-menu {
   position: absolute;
+  cursor: auto;
   pointer-events: auto;
   color: var(--text-color);
   overflow-y: auto;
   overflow-x: hidden;
   top: 60px;
+  left: 0;
   max-width: var(--sidebar-width);
   display: flex;
   flex-direction: column;
