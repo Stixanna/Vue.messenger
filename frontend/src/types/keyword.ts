@@ -1,9 +1,9 @@
-export interface Keyword {
+export interface RoomKeyword {
   name: string;
   order: number;
 }
 
-export interface GlobalKeyword {
+export interface Keyword {
   name: string;
   count: number;
 }

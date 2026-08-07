@@ -2,26 +2,25 @@ import { ref } from 'vue';
 import { defineStore } from 'pinia';
 import { useRoomsStore } from '@/stores/roomsStore';
 import type {
+  RoomKeyword,
   Keyword,
-  GlobalKeyword,
 } from '@/types/keyword';
-
 
 export const useKeywordsStore = defineStore(
   'keywords',
   () => {
     const keywords =
-      ref<GlobalKeyword[]>([]);
+      ref<Keyword[]>([]);
 
     function setKeywords(
-      value: GlobalKeyword[],
+      value: Keyword[],
     ): void {
       keywords.value = value;
     }
 
     function addRoomKeyword(
       roomId: string,
-      data: Keyword,
+      data: RoomKeyword,
     ): void {
       const roomsStore =
         useRoomsStore();

@@ -5,7 +5,12 @@ import type {
   Attachment,
   Message,
 } from './messages';
-
+import type { 
+  RoomTag, 
+} from './tag';
+import type { 
+  RoomKeyword, 
+} from './keyword';
 
 /**
  * Последнее сообщение комнаты
@@ -19,23 +24,6 @@ export interface LastMessage {
   username: string;
 }
 
-/**
- * Тег комнаты
- */
-export interface Tag {
-  tag_id: string;
-  name: string;
-  order: number;
-}
-
-/**
- * Ключевое слово комнаты
- */
-export interface Keyword {
-  name: string;
-  order: number;
-}
-
 export interface RoomDetails {
   id: string;
   name: string;
@@ -43,8 +31,8 @@ export interface RoomDetails {
   is_files_allowed: boolean;
   created_at: string;
   users: User[];
-  tags: Tag[];
-  keywords: Keyword[];
+  tags: RoomTag[];
+  keywords: RoomKeyword[];
 }
 
 export interface RoomAttachments {
@@ -64,8 +52,8 @@ export interface Room {
   is_archived: boolean;
   is_notifications: boolean;
   last_message: LastMessage;
-  tags: Tag[];
-  keywords: Keyword[];
+  tags: RoomTag[];
+  keywords: RoomKeyword[];
 
   selected: boolean;
   details?: RoomDetails;

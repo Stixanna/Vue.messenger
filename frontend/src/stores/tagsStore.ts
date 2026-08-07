@@ -2,16 +2,20 @@ import { ref } from 'vue';
 import { defineStore } from 'pinia';
 import { useRoomsStore } from '@/stores/roomsStore';
 import type {
-  GlobalTag,
-  AddTagPayload,
+  RoomTag,
   Tag,
 } from '@/types/tag';
 
+interface AddTagPayload {
+  tag_id: string;
+  tag_name: string;
+  order_num: number;
+}
 
 export const useTagsStore = defineStore('tags', () => {
-  const tags = ref<GlobalTag[]>([]);
+  const tags = ref<Tag[]>([]);
 
-  function setTags(value: GlobalTag[]): void {
+  function setTags(value: Tag[]): void {
     tags.value = value;
   }
 
@@ -27,12 +31,10 @@ export const useTagsStore = defineStore('tags', () => {
       return;
     }
 
-    const roomTag: Tag = {
+    const roomTag: RoomTag = {
       tag_id: data.tag_id,
       name: data.tag_name,
       order: data.order_num,
-    //   is_shared: data.is_shared,
-    //   user_id: data.user_id,
     };
 
     roomsStore.updateRoomTags(

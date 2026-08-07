@@ -1,5 +1,4 @@
 <script setup>
-// import BaseIcon from '@/components/BaseIcon.vue';
 
 const props = defineProps({
   tag: {
@@ -8,9 +7,6 @@ const props = defineProps({
   },
 });
 
-// const emit = defineEmits([
-//   'delete',
-// ]);
 </script>
 
 <template>
@@ -19,12 +15,6 @@ const props = defineProps({
     :data-value="tag.name">
 
     {{ tag.name }}
-
-    <!-- <BaseIcon
-      v-if="tag.del_btn"
-      id="deleteTag"
-      name="close"
-      @click.stop="emit('delete', tag)" /> -->
 
   </span>
 </template>

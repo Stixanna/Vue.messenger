@@ -14,6 +14,6 @@ export async function FetchUsers()
 }
 
 export async function FetchCurrentUser()
-  : Promise<User[]> {
+  : Promise<User> {
   return apiRequest('/user/me', { method: 'GET' });
 }
