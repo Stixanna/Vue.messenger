@@ -9,9 +9,7 @@ export function formatRelativeTime(timestamp) {
     const messageDate = new Date(timestamp);
     // если timestamp не ISO-date то вернуть это
     if (isNaN(messageDate.getTime())) {
-        if(timestamp !== '-Infinity');  // system timestamp
-            console.log('incorrect timestamp: ', timestamp);   // debug
-        return '??.??';
+        return '';
     }
 
     // Корректируем на локальное время

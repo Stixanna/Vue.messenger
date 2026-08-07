@@ -42,11 +42,6 @@ export async function loadRoomList() {
         img: [],
         notimg: []
       },
-      date: lastMsg
-        ? formatRelativeTime(lastMsg.timestamp)
-        : `Created ${formatRelativeTime(chat.created_at)}`,
-      timestamp: lastMsg ? lastMsg.timestamp : -Infinity,
-      last_message: lastMsg,
     };
   });
 

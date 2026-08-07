@@ -1,9 +1,16 @@
 <script setup>
-import {computed} from 'vue';
+import {
+  computed,
+} from 'vue';
+import {
+  formatRelativeTime
+} from '@/utils/formatRelativeTime';
+import {
+  useNow
+} from '@/composables/useNow';
 import Avatar from '@/components/Avatar.vue';
 import TagBadge from '@/components/TagBadge.vue';
 import BaseIcon from '@/components/BaseIcon.vue';
-
 
 const props = defineProps({
   item: {
@@ -71,10 +78,22 @@ const roomId = computed(() =>
 );
 
 const avatarTitle = computed(() =>
-  isMessage.value 
-    ? props.item.from.full_name
-    : props.item.name
+  isMessage.value ?
+  props.item.from.full_name :
+  props.item.name
 );
+
+const now = useNow();
+
+const relativeDate = computed(() => {
+  now.value;
+  const lastMsg = props.item.last_message;
+  const time = lastMsg
+    ? formatRelativeTime(lastMsg.timestamp)
+    : `Созд. ${formatRelativeTime(props.item.created_at)}`;
+
+  return time;
+});
 </script>
 
 <template>
@@ -128,12 +147,12 @@ const avatarTitle = computed(() =>
       </div>
 
       <div
-        v-if="item.date && isTime"
+        v-if="isTime"
         id="last-msg-date"
         class="chat-text-right"
         :data-timestamp="item.timestamp">
 
-        {{ item.date }}
+        {{ relativeDate }}
       </div>
 
     </div>
@@ -156,7 +175,8 @@ const avatarTitle = computed(() =>
 
       </div>
 
-      <TagBadge class="notify-red"
+      <TagBadge
+        class="notify-red"
         v-if="item.unread_count && isUnreadBadge"
         :tag="{ name: item.unread_count }" />
 
