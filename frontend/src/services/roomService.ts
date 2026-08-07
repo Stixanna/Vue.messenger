@@ -13,16 +13,16 @@ import type {
 } from '@/types/invites';
 
 import type {
-  Tag,
+  GlobalTag,
 } from '@/types/tag';
 
 import type {
-  Keyword,
+  GlobalKeyword,
 } from '@/types/keyword';
 
 
 export async function FetchRooms()
-  : Promise<{rooms: Room[], tags: Tag[], keywords: Keyword[]}> {
+  : Promise<{rooms: Room[], tags: GlobalTag[], keywords: GlobalKeyword[]}> {
   return apiRequest('/room/list', { method: 'GET' });
 }
 

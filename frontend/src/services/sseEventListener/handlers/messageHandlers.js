@@ -131,7 +131,7 @@ function handleDelayedMessageSent(message) {
 async function handleMessageUpdate(message) {
 
     // Обновляем список комнат не запрашивая список с сервера
-    await updateRoomListWithData({...message, is_message_update: true });
+    await updateRoomListWithData({...message, type: 'message_update' });
 
     console.log('Backend message edited:', message);
 }

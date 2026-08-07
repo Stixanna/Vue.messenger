@@ -26,3 +26,7 @@ export interface Message  {
   is_edited: boolean | undefined,
   is_read: boolean | undefined,
 }
+
+export interface RequestedMessage extends Message {
+  room_id: string;
+}

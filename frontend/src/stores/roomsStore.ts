@@ -13,6 +13,7 @@ import type {
   Keyword,
   Room,
   RoomDetails,
+  RoomAttachments,
 } from '@/types/rooms';
 import type {
   Message,
@@ -109,12 +110,18 @@ export const useRoomsStore = defineStore('rooms', () => {
 
     // Пока хендлеров для обновления кеша сообщений нет, всегда подгружаем их
     // if (!room.attachments) {
-      room.attachments = await loadRoomAttachments(
+      const attachments: RoomAttachments = {
+        img: [],
+        notimg: [],
+      };
+      // Пока загружаем только изображения
+      attachments.img = await loadRoomAttachments(
         room.id,
         'img',
         0,
         init_attachments_count
       );
+      room.attachments = attachments;
     // }
 
     // Пока хендлеров для обновления кеша сообщений нет, всегда подгружаем их
@@ -124,7 +131,7 @@ export const useRoomsStore = defineStore('rooms', () => {
         'initial',
       );
     // }
-    mergeMessageAttachments(room.messages, room.attachments);
+    mergeMessageAttachments(room.messages, room.attachments.img);
   }
 
   function mergeMessageAttachments(

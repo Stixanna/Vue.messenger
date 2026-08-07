@@ -81,7 +81,7 @@ async function handleRoomUpdate(eventedRoom) {
     const details = await loadRoomDetails(eventedRoom.id);
     roomsStore.updateRoomDetails(eventedRoom.id, details);
 
-    updateRoomListWithData({...eventedRoom, is_room_details: true});
+    updateRoomListWithData({...eventedRoom, room_details: true});
 
     console.log('Backend room updated:', eventedRoom);
 }
@@ -90,7 +90,7 @@ async function handleRoomUpdate(eventedRoom) {
  */
 function handleRoomDelete(eventedRoom) {
 
-    updateRoomListWithData({...eventedRoom, is_room_delete: true});
+    updateRoomListWithData({...eventedRoom, room_delete: true});
 
     console.log('Backend room deleted:', eventedRoom);
 }
@@ -103,7 +103,7 @@ function handleRoomUpdateNotifications(eventedRoom, payloadData) {
     const { is_notifications } = payloadData;
 
     eventedRoom = {...eventedRoom, is_notifications: is_notifications}
-    updateRoomListWithData({...eventedRoom, is_room_details: true});
+    updateRoomListWithData({...eventedRoom, room_details: true});
 
     console.log('Backend room notifications status changed:', eventedRoom);
 }

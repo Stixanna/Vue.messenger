@@ -1,43 +1,33 @@
 import { useRoomsStore } from '@/stores/roomsStore';
 import { useTagsStore } from '@/stores/tagsStore';
 import { useKeywordsStore } from '@/stores/keywordsStore';
-import { useSettingsStore } from '@/stores/settingsStore';
 import { FetchRooms } from '@/services/roomService';
-import { formatRelativeTime } from '@/utils/formatRelativeTime';
+import type { 
+  Room 
+} from '@/types/rooms';
 
-// import { getSelectedRoom } from '../../vars/stores/selectedRoomStore';
 
-
-/**
- * Метод фетча и после преобразования списка комн в удобоваримый вид
- */
-export async function loadRoomList() {
+export async function loadRoomList()
+: Promise<Room[]> {
   const roomsStore = useRoomsStore();
   const tagsStore = useTagsStore();
   const keywordsStore = useKeywordsStore();
-  const settingsStore = useSettingsStore();
-
-  let rawRooms, allTags, allKeywords = [];
 
   const currentRooms = roomsStore.rooms;
-  // const prevSelectedRoom = getSelectedRoom();
 
   const responseData = await FetchRooms();
 
-  rawRooms = Object.entries(responseData.rooms);
-  allTags = responseData.tags;
-  allKeywords = responseData.keywords;
-
+  const rawRooms = Object.entries(responseData.rooms);
+  const allTags = responseData.tags;
+  const allKeywords = responseData.keywords;
 
   // Преобразуем объект в массив чатов
   const rooms = rawRooms.map(([_, chat]) => {
-    const lastMsg = chat.last_message;
-
     const existingRoom = currentRooms.find(r => r.id === chat.id);
 
     return {
       ...chat,
-      details: existingRoom?.details ?? null,
+      details: existingRoom?.details,
       attachments: existingRoom?.attachments || {
         img: [],
         notimg: []

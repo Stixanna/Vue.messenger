@@ -32,6 +32,8 @@ export const useUsersStore = defineStore('users', () => {
     });
   });
 
+  const currentUser = computed(getCurrentUser);
+
   /**
    * Actions
    */
@@ -49,12 +51,14 @@ export const useUsersStore = defineStore('users', () => {
     }));
   }
 
-  const currentUser = computed(() =>
-    users.value.find(user => user.current === true),
-  );
+  function getCurrentUser(): User {
+    const user = users.value.find(user => user.current);
 
-  function getCurrentUser(): User | undefined {
-    return users.value.find(user => user.current === true);
+    if (!user) {
+      throw new Error('Current user was not found.');
+    }
+
+    return user;
   }
 
   function getUserById(

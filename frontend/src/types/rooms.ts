@@ -47,6 +47,11 @@ export interface RoomDetails {
   keywords: Keyword[];
 }
 
+export interface RoomAttachments {
+  img: Attachment[];
+  notimg: Attachment[];
+}
+
 /**
  * Комната
  */
@@ -65,5 +70,5 @@ export interface Room {
   selected: boolean;
   details?: RoomDetails;
   messages?: Message[];
-  attachments?: Attachment[];
+  attachments?: RoomAttachments;
 }

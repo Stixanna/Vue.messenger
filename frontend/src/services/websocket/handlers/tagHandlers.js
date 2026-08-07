@@ -74,7 +74,7 @@ function handleTagRename(data) {
     tagsStore.updateTagName(data);
 
     // rename tag in room list глобально по всем комнатам
-    updateRoomListWithData({...data, is_tag_rename: true});
+    updateRoomListWithData({...data, tag_rename: true});
 
     console.log('Backend tag renamed:', data);
 }
