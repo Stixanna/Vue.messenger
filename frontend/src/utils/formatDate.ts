@@ -1,26 +1,14 @@
 import { useSettingsStore } from '@/stores/settingsStore';
 
 
-/**
- * Метод для преобразования цифр таймштампа в читаемый вид
- * @param {string} timestamp Таймштамп
- * @param {bool} is_readable_var - Опциональный параметр, если передан - возвращается день недели
- * @returns {string} Возвращает день недели / дату 
- */
-export function formatDate( timestamp, is_readable_var ) {
-    let date;
-
-    if (typeof timestamp === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(timestamp)) {
-        // если передана только дата без времени — парсим вручную, чтобы не зависеть от UTC
-        const [year, month, day] = timestamp.split('-').map(Number);
-        date = new Date(year, month - 1, day); // ← локальное время // month - 1 js особенность 
-    } else {
-        // если полный timestamp или миллисекунды
-        date = new Date(timestamp);
-    }
+export function formatDate(
+    timestamp: string | number,
+    returnWeekday = false
+): string {
+    const date = new Date(timestamp);
 
     if (isNaN(date.getTime())) {
-        return '??.??';
+        return '';
     }
 
     const settingsStore = useSettingsStore();
@@ -37,7 +25,9 @@ export function formatDate( timestamp, is_readable_var ) {
     const dateOnly = new Date(date.getFullYear(), date.getMonth(), date.getDate());
     const nowOnly = new Date(now.getFullYear(), now.getMonth(), now.getDate());
 
-    const dryDiffInDays = Math.floor((nowOnly - dateOnly) / (1000 * 60 * 60 * 24));
+    const dryDiffInDays = Math.floor(
+        (nowOnly.getTime() - dateOnly.getTime()) / (1000 * 60 * 60 * 24)
+    );
     const diffInDays = Math.abs(dryDiffInDays);
 
     let is_sheduled;
@@ -49,7 +39,7 @@ export function formatDate( timestamp, is_readable_var ) {
     } else if (diffInDays === 1) {
         return !is_sheduled ? 'Вчера' : 'Завтра';
     } else if (diffInDays < 7) {
-        if(is_readable_var){
+        if(returnWeekday){
             const weekday = date.toLocaleDateString('ru-RU', { weekday: 'short' });
             const capitalized_weekday = weekday.charAt(0).toUpperCase() + weekday.slice(1);
             return capitalized_weekday; // en-US "Monday" ru-RU "Понедельник"
@@ -59,7 +49,7 @@ export function formatDate( timestamp, is_readable_var ) {
             return full_date_nums; 
         }
     } else {
-        if(is_readable_var){
+        if(returnWeekday){
             return date.toLocaleDateString('ru-RU', {
                 day: 'numeric',
                 month: 'short',
@@ -73,13 +63,10 @@ export function formatDate( timestamp, is_readable_var ) {
     }
 }
 
-/**
- * Метод для преобразования даты в читаемый вид
- * @param {Date} date Дата 
- * @param {bool} is_weekday - Опциональный параметр, если true то рядом с датой будет день недели
- * @returns {string} Возвращает дату и день недели
- */
-function formatDateRu( date, is_weekday ) {
+function formatDateRu(
+    date: Date,
+    isWeekday = false
+): string {
     const d = new Date(date);
 
     const day = String(d.getDate()).padStart(2, '0');
@@ -92,7 +79,7 @@ function formatDateRu( date, is_weekday ) {
 
     const formatted_date = `${day}.${month}.${year}`;
     
-    return `${formatted_date}${is_weekday ? `, ${capitalized_weekday}` : ''}`;
+    return `${formatted_date}${isWeekday ? `, ${capitalized_weekday}` : ''}`;
 }
 
 /**
@@ -100,7 +87,9 @@ function formatDateRu( date, is_weekday ) {
  * @param {Date} date Дата 
  * @returns {string} Возвращает дату в формате iso
  */
-function formatDateIso( date ) {
+function formatDateIso(
+    date: Date
+): string {
     const d = new Date(date);
 
     const day = String(d.getDate()).padStart(2, '0');

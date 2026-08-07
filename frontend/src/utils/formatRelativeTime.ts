@@ -2,21 +2,17 @@ import { formatDate } from "@/utils/formatDate";
 // import { getCurrentLanguage } from "../vars/stores/currentLanguageStore";
 
 
-// метод возвращающий количество прошедшего с timestamp времени / дату
-// timestamp => ISO-date format
-export function formatRelativeTime(timestamp) {
-    const now = new Date();
+export function formatRelativeTime(
+	timestamp: string,
+): string {
     const messageDate = new Date(timestamp);
-    // если timestamp не ISO-date то вернуть это
+
     if (isNaN(messageDate.getTime())) {
         return '';
     }
 
-    // Корректируем на локальное время
-    let localOffset = messageDate.getTimezoneOffset();
-    let localTime = new Date(messageDate.getTime() - localOffset);
-
-    const diffInMinutes = (now - localTime) / (1000 * 60);
+    const diffInMinutes =
+        (Date.now() - messageDate.getTime()) / 60_000;
     const diffInHours = diffInMinutes / 60;
 
     if (diffInMinutes < 1) 
