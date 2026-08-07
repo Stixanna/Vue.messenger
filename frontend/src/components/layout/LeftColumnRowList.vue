@@ -1,7 +1,10 @@
 <script setup>
-import { computed } from 'vue';
-import { storeToRefs } from 'pinia';
-import { useRoomsStore } from '@/stores/roomsStore';
+import {
+  computed,
+} from 'vue';
+import {
+  useRoomsStore,
+} from '@/stores/roomsStore';
 import ListItem from '@/components/ListItem.vue';
 
 const props = defineProps({
@@ -23,41 +26,14 @@ const props = defineProps({
 
 const roomsStore = useRoomsStore();
 
-const {
-  rooms
-} = storeToRefs(roomsStore);
-
 const TEXT_VALS = {
   archive_text: "Архив",
   empty_list_text: "Пустой список",
 }
 
 const correctedRooms = computed(() => {
-  const archivedRooms = rooms.value
-    .filter(room => room.is_archived)
-    .sort((a, b) => {
-      if (!props.roomResort) {
-        return 0;
-      }
-
-      return (
-        new Date(a.last_message?.timestamp ?? 0) -
-        new Date(b.last_message?.timestamp ?? 0)
-      );
-    });
-
-  const visibleRooms = rooms.value
-    .filter(room => !room.is_archived)
-    .sort((a, b) => {
-      if (!props.roomResort) {
-        return 0;
-      }
-
-      return (
-        new Date(a.last_message?.timestamp ?? 0) -
-        new Date(b.last_message?.timestamp ?? 0)
-      );
-    });
+  const visibleRooms = roomsStore.visibleRooms;
+  const archivedRooms = roomsStore.archivedRooms;
 
   const archive = {
     id: 'archive',
@@ -65,9 +41,9 @@ const correctedRooms = computed(() => {
     tags: [],
     keywords: [],
     last_message: {
-      text: archivedRooms.length > 0 ?
-        archivedRooms.map(room => room.name).join(', ') :
-        TEXT_VALS.empty_list_text,
+      text: archivedRooms.length > 0 
+        ? archivedRooms.map(room => room.name).join(', ') 
+        : TEXT_VALS.empty_list_text,
     },
     unread_count: 0,
   };

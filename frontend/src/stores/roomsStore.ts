@@ -3,6 +3,7 @@ import { defineStore } from 'pinia';
 import { loadRoomMessages } from '@/services/dataLoaders/loadRoomMessages';
 import { loadRoomDetails } from "@/services/dataLoaders/loadRoomDetails";
 import { loadRoomAttachments } from '@/services/dataLoaders/loadRoomAttachments';
+import { useSettingsStore } from '@/stores/settingsStore';
 import {
   useUsersStore,
   parsePayloadRoomRights,
@@ -21,6 +22,7 @@ import type {
 
 export const useRoomsStore = defineStore('rooms', () => {
   const usersStore = useUsersStore();
+  const settingsStore = useSettingsStore();
   /**
    * State
    */
@@ -29,9 +31,32 @@ export const useRoomsStore = defineStore('rooms', () => {
   /**
    * Getters
    */
-  const archivedRoom = computed(() =>
-    rooms.value.find(room => room.is_archived),
-  );
+
+  const visibleRooms = computed(() => {
+    const result = rooms.value.filter(room => !room.is_archived);
+
+    if (!settingsStore.isRoomsResorted) {
+      return result;
+    }
+
+    return [...result].sort((a, b) =>
+      new Date(a.last_message?.timestamp ?? 0).getTime() -
+      new Date(b.last_message?.timestamp ?? 0).getTime()
+    );
+  });
+
+  const archivedRooms = computed(() => {
+    const result = rooms.value.filter(room => room.is_archived);
+
+    if (!settingsStore.isRoomsResorted) {
+      return result;
+    }
+
+    return [...result].sort((a, b) =>
+      new Date(a.last_message?.timestamp ?? 0).getTime() -
+      new Date(b.last_message?.timestamp ?? 0).getTime()
+    );
+  });
 
   const selectedRoom = computed(() =>
     rooms.value.find(room => room.selected),
@@ -209,7 +234,8 @@ export const useRoomsStore = defineStore('rooms', () => {
   return {
     rooms,
 
-    archivedRoom,
+    visibleRooms,
+    archivedRooms,
     activeRoomId,
     selectedRoom,
 

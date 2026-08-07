@@ -1,4 +1,3 @@
-import { formatRelativeTime } from '@/utils/formatRelativeTime'
 import { loadRoomList } from '@/services/dataLoaders/loadRoomList'
 import { useUsersStore } from '@/stores/usersStore'
 import { useRoomsStore } from '@/stores/roomsStore'
@@ -49,61 +48,50 @@ function updateRoomListWithMessage(message, insertToTop = true) {
 
   // изменяем переменные при необходимости внутри списка комнат
   if (roomIndex !== -1) {
-    let room = rooms[roomIndex]
+    const room = rooms[roomIndex];
 
-    // Удаляем старую версию комнаты
-    rooms.splice(roomIndex, 1)
+    const isMessageUpdate =
+      message.id === room.last_message.id?.id || message.is_message_update;
 
-    const isMessageUpdate = message.id === room.last_message.id || message.is_message_update
-    // определяем необходимость изменения (если сообщение новое)
-    const shouldUpdate = isMessageUpdate || insertToTop
+    const shouldUpdate = isMessageUpdate || insertToTop;
 
-    // Проверка необходимости изменения переменных последнего сообщения комнаты
-    const updId = shouldUpdate ? message.id : room.last_message.id
-    const updFromId = shouldUpdate ? message.from?.id : room.last_message.from
+    const updId = shouldUpdate ? message.id : room.last_message.id?.id;
+    const updFromId = shouldUpdate ? message.from?.id : room.last_message.id?.from;
     const updIsAttachments = shouldUpdate
       ? message.attachments.length > 0
-      : room.last_message.is_attachments
-    const updUsername = shouldUpdate ? message.from?.username : room.last_message.username
-    const updText = shouldUpdate ? message.text : room.last_message.text
-    const updTimestamp = shouldUpdate ? message.timestamp : room.last_message.timestamp
-    const updDate = shouldUpdate ? formatRelativeTime(message.timestamp) : room.date
+      : room.last_message.id?.is_attachments;
+    const updUsername = shouldUpdate
+      ? message.from?.username
+      : room.last_message.id?.username;
+    const updText = shouldUpdate
+      ? message.text
+      : room.last_message.id?.text;
+    const updTimestamp = shouldUpdate
+      ? message.timestamp
+      : room.last_message.id?.timestamp;
 
-    const updatedRoom = {
-      ...room,
-      unread_count:
-        !isOutgoing || wasSheduled
-          ? isMessageUpdate
-            ? room.unread_count
-            : room.unread_count + 1
-          : 0,
-      is_archived: room.is_archived && room.is_notifications ? false : room.is_archived,
-      date: updDate,
+    room.unread_count =
+      !isOutgoing || wasSheduled
+        ? isMessageUpdate
+          ? room.unread_count
+          : room.unread_count + 1
+        : 0;
+
+    room.is_archived =
+      room.is_archived && room.is_notifications
+        ? false
+        : room.is_archived;
+
+    room.timestamp = updTimestamp;
+
+    Object.assign(room.last_message, {
+      id: updId,
+      from: updFromId,
+      is_attachments: updIsAttachments,
+      username: updUsername,
+      text: updText,
       timestamp: updTimestamp,
-      last_message: {
-        ...room.last_message,
-        id: updId,
-        from: updFromId,
-        is_attachments: updIsAttachments,
-        username: updUsername,
-        text: updText,
-        timestamp: updTimestamp,
-      },
-    }
-
-    // Вставка: в начало или на прежнее место
-    if (insertToTop) {
-      const settingsStore = useSettingsStore();
-      const sortingOrderReversed = settingsStore.isRoomsResorted;
-      if (sortingOrderReversed) {
-          rooms.push(updatedRoom);
-      }
-      else {
-      rooms.unshift(updatedRoom)
-      }
-    } else {
-      rooms.splice(roomIndex, 0, updatedRoom)
-    }
+    });
   }
 
   return rooms
