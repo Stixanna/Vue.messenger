@@ -3,14 +3,13 @@ import { defineStore } from 'pinia';
 import { loadRoomMessages } from '@/services/dataLoaders/loadRoomMessages';
 import { loadRoomDetails } from "@/services/dataLoaders/loadRoomDetails";
 import { loadRoomAttachments } from '@/services/dataLoaders/loadRoomAttachments';
+import { isImageByMimeType } from '@/utils/isImageByMimeType';
 import { useSettingsStore } from '@/stores/settingsStore';
 import {
   useUsersStore,
   parsePayloadRoomRights,
 } from '@/stores/usersStore';
 import type {
-  Tag,
-  Keyword,
   Room,
   RoomDetails,
   RoomAttachments,
@@ -19,6 +18,12 @@ import type {
   Message,
   Attachment,
 } from '@/types/messages';
+import type {
+  RoomTag,
+} from '@/types/tag';
+import type {
+  RoomKeyword,
+} from '@/types/keyword';
 
 
 export const useRoomsStore = defineStore('rooms', () => {
@@ -36,27 +41,37 @@ export const useRoomsStore = defineStore('rooms', () => {
   const visibleRooms = computed(() => {
     const result = rooms.value.filter(room => !room.is_archived);
 
-    if (!settingsStore.isRoomsResorted) {
-      return result;
-    }
+    return [...result].sort((a, b) => {
+      const timestampA = new Date(
+        a.last_message?.timestamp ?? 0,
+      ).getTime();
 
-    return [...result].sort((a, b) =>
-      new Date(a.last_message?.timestamp ?? 0).getTime() -
-      new Date(b.last_message?.timestamp ?? 0).getTime()
-    );
+      const timestampB = new Date(
+        b.last_message?.timestamp ?? 0,
+      ).getTime();
+
+      return settingsStore.isRoomsResorted
+        ? timestampA - timestampB
+        : timestampB - timestampA;
+    });
   });
 
   const archivedRooms = computed(() => {
     const result = rooms.value.filter(room => room.is_archived);
 
-    if (!settingsStore.isRoomsResorted) {
-      return result;
-    }
+    return [...result].sort((a, b) => {
+      const timestampA = new Date(
+        a.last_message?.timestamp ?? 0,
+      ).getTime();
 
-    return [...result].sort((a, b) =>
-      new Date(a.last_message?.timestamp ?? 0).getTime() -
-      new Date(b.last_message?.timestamp ?? 0).getTime()
-    );
+      const timestampB = new Date(
+        b.last_message?.timestamp ?? 0,
+      ).getTime();
+
+      return settingsStore.isRoomsResorted
+        ? timestampA - timestampB
+        : timestampB - timestampA;
+    });
   });
 
   const selectedRoom = computed(() =>
@@ -132,6 +147,83 @@ export const useRoomsStore = defineStore('rooms', () => {
       );
     // }
     mergeMessageAttachments(room.messages, room.attachments.img);
+  }
+
+  function updateRoomMessages(
+    roomId: string,
+    message: Message,
+    type: 'message_receive' | 'message_update' | 'message_delete',
+  ): void {
+    const room = getRoomById(roomId);
+
+    if(!room) {
+      console.warn(`Room ${roomId} not found while updating message`, message);
+      return;
+    }
+
+    if(!room.messages) {
+      return;
+    }
+
+    if(type === 'message_receive') {
+      room.messages.unshift(message);
+
+      if (message.attachments.length > 0) {
+        message.attachments.forEach(attachment => {
+          const isImage = isImageByMimeType(attachment);
+
+          const attachmentArr = isImage
+            ? room.attachments?.img
+            : room.attachments?.notimg;
+
+          attachmentArr?.unshift(attachment);
+        });
+      }
+    }
+    else if(type === 'message_update') {
+      const roomMessage = room.messages.find(m => m.id === message.id);
+
+      if(!roomMessage) {
+        console.warn(`Message ${message.id} not found in room ${roomId} while updating message`, message);
+        return;
+      }
+
+      Object.assign(roomMessage, message);
+    }
+    else if(type === 'message_delete') {
+      room.messages = room.messages.filter(m => m.id !== message.id);
+
+      // // Удаляем вложение из вложений выбранной комнаты
+      // if (room.attachments) {
+      //   const deleted_msg_id = message.id;
+
+      //   const deletedAttachments = [];
+
+      //   const split = (arr = []) => {
+      //     const keep = [];
+
+      //     for (const item of arr) {
+      //       if (item.message_id === deleted_msg_id) {
+      //         deletedAttachments.push(item);
+      //       } else {
+      //         keep.push(item);
+      //       }
+      //     }
+
+      //     return keep;
+      //   };
+
+      //   // 1. Обновляем данные
+      //   const nextImg = split(room.attachments.img);
+      //   const nextNotImg = split(room.attachments.notimg);
+
+      //   // Заменяем массивы целиком (не мутируем)
+      //   room.attachments.img = nextImg;
+      //   room.attachments.notimg = nextNotImg;
+
+      //   // message.deleted_attachments = deletedAttachments;
+      // }
+    }
   }
 
   function mergeMessageAttachments(
@@ -210,7 +302,7 @@ export const useRoomsStore = defineStore('rooms', () => {
 
   function updateRoomTags(
     roomId: string,
-    tags: Tag[],
+    tags: RoomTag[],
   ): void {
     const room = getRoomById(roomId);
 
@@ -223,7 +315,7 @@ export const useRoomsStore = defineStore('rooms', () => {
 
   function updateRoomKeywords(
     roomId: string,
-    keywords: Keyword[],
+    keywords: RoomKeyword[],
   ): void {
     const room = getRoomById(roomId);
 
@@ -246,6 +338,7 @@ export const useRoomsStore = defineStore('rooms', () => {
     activeRoomId,
     selectedRoom,
 
+    updateRoomMessages,
     restoreActiveRoom,
     selectRoom,
     setRooms,

@@ -26,8 +26,13 @@ const messageActionHandlers = {
  * @returns {Promise<{}>} Нормализованные данные события.
  */
 export async function processMessageEvent(payload) {
-    const messageInfo = await loadMessageInfo(payload.data.id);
-    
+    let messageInfo = payload.data;
+
+    if(payload.action !== 'message-delete-min') 
+    {
+        messageInfo = await loadMessageInfo(payload.data.id);
+    }
+
     // Обозначение сообщения ивент на которое пришел (важно при 'message-delete-min')
     messageInfo.id = payload.data.id;
 
@@ -85,23 +90,16 @@ async function handleReceivedMessage(message) {
     // Обозначение прочитанности сообщения
     message.is_read = wasSheduled ? false : isOutgoing;
 
+    const typedMessage = {...message, type: 'message_receive' };
+
     // Обновляем список комнат не запрашивая список с сервера
-    await updateRoomListWithData(message);
+    await updateRoomListWithData(typedMessage);
 
-    // Добавляем новое вложение к вложениям выбранной комнаты
-    if (attachments.length > 0) {
-        attachments.forEach(attachment => {
-            // Обработка вложений разных типов
-            const att_type = attachment.type.split('/')[0];
-            const isImage = att_type === 'image';
+    // вот тут должна быть проверка что комната совпадает к которой добавлять вложения
+    if(message.room_id !== selected_room.id)
+      return;
 
-            const attachmentArr = isImage
-                ? selected_room.attachments.img
-                : selected_room.attachments.notimg;
-
-            attachmentArr.unshift(attachment);
-        });
-    }
+    roomsStore.updateRoomMessages(message.room_id, message, typedMessage.type);
 
     console.log('Backend message receive:', message);
 }
@@ -129,9 +127,14 @@ function handleDelayedMessageSent(message) {
  * @param {MessageEvent} message
  */
 async function handleMessageUpdate(message) {
+    const roomsStore = useRoomsStore();
+
+    const typedMessage = {...message, type: 'message_update' };
 
     // Обновляем список комнат не запрашивая список с сервера
-    await updateRoomListWithData({...message, type: 'message_update' });
+    await updateRoomListWithData(typedMessage);
+
+    roomsStore.updateRoomMessages(message.room_id, message, typedMessage.type);
 
     console.log('Backend message edited:', message);
 }
@@ -146,37 +149,6 @@ async function handleMessageDelete(message) {
 
     // Обновляем список комнат by server так как запросить информацию о сообщении невозможно
     await updateRoomListWithData();
-
-    // Удаляем вложение из вложений выбранной комнаты
-    if (selected_room?.attachments) {
-        const deleted_msg_id = id;
-
-        const deletedAttachments = [];
-
-        const split = (arr = []) => {
-            const keep = [];
-
-            for (const item of arr) {
-                if (item.message_id === deleted_msg_id) {
-                    deletedAttachments.push(item);
-                } else {
-                    keep.push(item);
-                }
-            }
-
-            return keep;
-        };
-
-        // 1. Обновляем данные
-        const nextImg = split(selected_room.attachments.img);
-        const nextNotImg = split(selected_room.attachments.notimg);
-
-        // Заменяем массивы целиком (не мутируем)
-        selected_room.attachments.img = nextImg;
-        selected_room.attachments.notimg = nextNotImg;
-
-        message.deleted_attachments = deletedAttachments;
-    }
 
     console.log('Backend message deleted:', message);
 }

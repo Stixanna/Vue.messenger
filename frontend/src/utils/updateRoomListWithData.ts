@@ -14,6 +14,10 @@ type MessageUpdate = RequestedMessage & {
   type: 'message_update';
 };
 
+type MessageReceive = RequestedMessage & {
+  type: 'message_receive';
+};
+
 type TagUpdate = Tag & {
   type: 'tag_rename';
   old_name: string, 
@@ -30,6 +34,7 @@ type DeleteRoomUpdate = {
 };
 
 type RoomUpdateData =
+  | MessageReceive
   | MessageUpdate
   | TagUpdate
   | DetailsUpdate
@@ -62,8 +67,9 @@ export async function updateRoomListWithData(
       rooms = updateRoomListWithDeletedRoomId(data);
       break;
 
+    case 'message_receive':
     case 'message_update':
-      rooms = updateRoomListWithMessage(data, false);
+      rooms = updateRoomListWithMessage(data);
       break;
 
     case 'tag_rename':
@@ -78,8 +84,7 @@ export async function updateRoomListWithData(
 }
 
 export function updateRoomListWithMessage(
-	message: MessageUpdate,
-  insertToTop = true
+	message: MessageUpdate | MessageReceive,
 ): Room[] {
   const roomsStore = useRoomsStore()
   const usersStore = useUsersStore()
@@ -96,48 +101,52 @@ export function updateRoomListWithMessage(
     return rooms;
   }
 
-  const isMessageUpdate =
-    message.id === room.last_message?.id || message.type === 'message_update';
+  // определяем необходимость изменения последнего сообщения
+  const isNewLastMessage = message.type === 'message_receive';
+  const isMessageEdit = message.type === 'message_update';
 
-  const shouldUpdate = isMessageUpdate || insertToTop;
+  const isLastMessage =
+      message.id === room.last_message.id;
 
-  const updId = shouldUpdate ? message.id : room.last_message?.id;
-  const updFromId = shouldUpdate ? message.from?.id : room.last_message?.from;
-  const updIsAttachments = shouldUpdate
-    ? message.attachments.length > 0
-    : room.last_message?.is_attachments;
-  const updUsername = shouldUpdate
-    ? message.from?.username
-    : room.last_message?.username;
-  const updText = shouldUpdate
-    ? message.text
-    : room.last_message?.text;
-  const updTimestamp = shouldUpdate
-    ? message.timestamp
-    : room.last_message?.timestamp;
+  const isLastMessageEdited =
+      isMessageEdit && isLastMessage;
 
-  room.unread_count =
-    !isOutgoing || wasSheduled
-      ? isMessageUpdate
-        ? room.unread_count
-        : room.unread_count + 1
-      : 0;
 
-  room.is_archived =
-    room.is_archived && room.is_notifications
-      ? false
-      : room.is_archived;
+  const shouldUpdateLastMessage =
+      isLastMessageEdited || isNewLastMessage;
+  
+  const lastMessageData = shouldUpdateLastMessage
+    ? {
+      id: message.id,
+      from: message.from?.id,
+      is_attachments: message.attachments.length > 0,
+      username: message.from?.username,
+      text: message.text,
+      timestamp: message.timestamp,
+    }
+    : room.last_message;
 
-  room.last_message.timestamp = updTimestamp;
+  const updatedRoom = {
+    ...room,
 
-  Object.assign(room.last_message, {
-    id: updId,
-    from: updFromId,
-    is_attachments: updIsAttachments,
-    username: updUsername,
-    text: updText,
-    timestamp: updTimestamp,
-  });
+    unread_count:
+      !isOutgoing || wasSheduled
+        ? isMessageEdit
+          ? room.unread_count
+          : room.unread_count + 1
+        : 0,
+
+    timestamp: shouldUpdateLastMessage
+      ? message.timestamp
+      : room.last_message.timestamp,
+
+    last_message: {
+      ...room.last_message,
+      ...lastMessageData,
+    },
+  };
+
+  Object.assign(room, updatedRoom);
 
   return rooms
 }
