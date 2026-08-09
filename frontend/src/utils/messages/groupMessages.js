@@ -22,7 +22,7 @@ export function groupMessages(messages, thresholdMinutes) {
     .map((dateGroup) => ({
       ...dateGroup,
       groups: groupByPeer(
-        dateGroup.messages,
+        dateGroup.messages.reverse(),
         thresholdMinutes,
       ),
     }))
@@ -68,7 +68,7 @@ function groupByPeer(messages, thresholdMinutes) {
   });
 
 
-  return groups.reverse();
+  return groups;
 }
 
 
