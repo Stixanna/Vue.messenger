@@ -4,14 +4,21 @@ import {
 	apiRequest
 } from '@/services/api';
 
-export async function login(username, password) {
-	return apiRequest('/auth/login', {method: 'POST', body: {
+export async function login(
+	  username: string,
+	  password: string,
+	): Promise<any> {
+	const response = await apiRequest('/auth/login', {method: 'POST', body: {
 		username,
 		password,
 	}});
+	return response;
 }
 
-export async function setup2fa(username, password) {
+export async function setup2fa(
+	  username: string,
+	  password: string,
+	): Promise<any> {
 	return apiRequest('/auth/2fa/setup', {method: 'POST', body: {
 		username,
 		password,
@@ -19,10 +26,10 @@ export async function setup2fa(username, password) {
 }
 
 export async function verify2faSetup(
-	username,
-	password,
-	otp,
-) {
+	  username: string,
+	  password: string,
+	  otp: string,
+	): Promise<any> {
 	return apiRequest('/auth/2fa/setup', {method: 'POST', body: {
 		username,
 		password,
@@ -31,10 +38,10 @@ export async function verify2faSetup(
 }
 
 export async function verify2faLogin(
-	username,
-	password,
-	otp,
-) {
+	  username: string,
+	  password: string,
+	  otp: string,
+	): Promise<any> {
 	return apiRequest('/auth/2fa/login', {method: 'POST', body: {
 		username,
 		password,

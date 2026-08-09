@@ -40,6 +40,9 @@ export async function apiRequest(
   } else if (contentType.startsWith('text/')) {
     data = await response.text();
   } else {
+    if (contentType === '') 
+      console.warn('apiRequest: Content-Type is empty. Response may be empty or binary data.');
+    
     // Любой другой Content-Type считаем бинарными данными
     data = await response.blob();
   }
