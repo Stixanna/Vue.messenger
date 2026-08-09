@@ -1,14 +1,14 @@
 import { FetchMessageInfo } from '@/services/messageService';
 
 import type {
-  Message,
+	RequestedMessage,
 } from '@/types/messages';
 
 
 export async function loadMessageInfo(
   message_id: string,
-): Promise<Message> {
-  const responseData = await await FetchMessageInfo(message_id);
+): Promise<RequestedMessage> {
+  const responseData = await FetchMessageInfo(message_id);
 
   return responseData;
 }

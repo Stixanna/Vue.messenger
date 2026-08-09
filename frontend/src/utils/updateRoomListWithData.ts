@@ -18,6 +18,10 @@ type MessageReceive = RequestedMessage & {
   type: 'message_receive';
 };
 
+type MessageDelete = RequestedMessage & {
+  type: 'message_delete';
+};
+
 type TagUpdate = Tag & {
   type: 'tag_rename';
   old_name: string, 
@@ -36,6 +40,7 @@ type DeleteRoomUpdate = {
 type RoomUpdateData =
   | MessageReceive
   | MessageUpdate
+  | MessageDelete
   | TagUpdate
   | DetailsUpdate
   | DeleteRoomUpdate;
@@ -51,12 +56,9 @@ export async function updateRoomListWithData(
   let rooms: Room[];
 
   if (!data) {
-    rooms = await loadRoomList();
-
-    roomsStore.setRooms(rooms);
+    await loadRoomList();
     return;
   }
-
 
   switch (data.type) {
     case 'room_details':
@@ -70,6 +72,10 @@ export async function updateRoomListWithData(
     case 'message_receive':
     case 'message_update':
       rooms = updateRoomListWithMessage(data);
+      break;
+      
+    case 'message_delete':
+      rooms = await loadRoomList();
       break;
 
     case 'tag_rename':
