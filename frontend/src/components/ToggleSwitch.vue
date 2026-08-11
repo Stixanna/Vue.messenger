@@ -79,4 +79,7 @@ function handleChange(event) {
 .menu-item .toggle_area {
   pointer-events: auto;
 }
+.dark #theme-checkbox:checked + .toggle_area {
+  background-color: var(--base-color-dark);
+}
 </style>

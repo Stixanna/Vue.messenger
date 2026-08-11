@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { RouterView } from 'vue-router'
 import { useGlobalListeners } from '@/composables/useGlobalListeners';
+import { useTheme } from '@/composables/useTheme';
+
 // import { setTheme, getTheme } from 'vue-router'
 // import { requestNotifications } from 'vue-router'
 
@@ -13,6 +15,7 @@ import { useGlobalListeners } from '@/composables/useGlobalListeners';
 // renderIndexElements()
 // // Следует разнести по компонентам/composable при создании
 // addIndexListeners();
+useTheme();
 useGlobalListeners();
 </script>
 

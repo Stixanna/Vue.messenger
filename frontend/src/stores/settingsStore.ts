@@ -3,6 +3,16 @@ import { ref, computed } from 'vue';
 
 const STORAGE_KEY = 'client_settings';
 
+interface Settings {
+  avatarCharsCount: number;
+  dateFormat: string;
+  notificationsAllowed: boolean;
+  showSharedTags: boolean;
+  showTagsTree: boolean;
+  theme: 'light' | 'dark';
+  isRoomsResorted: boolean;
+}
+
 const defaultSettings = {
   avatarCharsCount: 1,
   dateFormat: 'def',
@@ -45,9 +55,10 @@ export const useSettingsStore = defineStore(
     }
 
 
-    function updateSetting(
-      key : string, 
-      value: any) {
+    function updateSetting<K extends keyof Settings>(
+      key: K,
+      value: Settings[K],
+    ): void {
       settings.value[key] = value;
       saveSettings();
     }
