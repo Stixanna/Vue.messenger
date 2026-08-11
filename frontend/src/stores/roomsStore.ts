@@ -104,6 +104,17 @@ export const useRoomsStore = defineStore('rooms', () => {
     });
   }
 
+  function closeSelectedRoom(): void {
+    const selectedRoom = rooms.value.find(room => room.selected);
+
+    if (!selectedRoom) {
+      return;
+    }
+
+    selectedRoom.selected = false;
+    setActiveRoom('');
+  }
+
   async function selectRoom(roomId: string): Promise<void> {
 
     const room = getRoomById(roomId);
@@ -341,6 +352,7 @@ export const useRoomsStore = defineStore('rooms', () => {
     updateRoomMessages,
     restoreActiveRoom,
     selectRoom,
+    closeSelectedRoom,
     setRooms,
     getRoomById,
     updateRoomDetails,

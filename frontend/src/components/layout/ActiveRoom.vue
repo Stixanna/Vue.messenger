@@ -1,25 +1,29 @@
 <script setup>
 import { storeToRefs } from 'pinia';
 import { computed } from 'vue';
+import { useRoomsStore } from '@/stores/roomsStore';
+import { useUsersStore } from '@/stores/usersStore';
+import { useUiStackItem } from '@/composables/useUiStackItem';
 import ChatHeader from '@/components/layout/ChatHeader.vue';
 import MessageList from '@/components/messages/MessageList.vue';
 import ChatInput from '@/components/layout/ChatInput.vue';
-import { useRoomsStore } from '@/stores/roomsStore';
-import { useUsersStore } from '@/stores/usersStore';
-
 
 const roomsStore = useRoomsStore();
 const usersStore = useUsersStore();
 
-const {
-  selectedRoom,
-} = storeToRefs(roomsStore);
+const props = defineProps({
+  selectedRoom: {
+    type: Object,
+    required: true,
+  },
+});
+
 const {
   currentUser
 } = storeToRefs(usersStore);
 
 const canWrite = computed(() => {
-  const room = selectedRoom.value;
+  const room = props.selectedRoom;
 
   if (!room) {
     return false;
@@ -29,7 +33,7 @@ const canWrite = computed(() => {
 });
 
 const messages = computed(() => {
-  const room = selectedRoom.value;
+  const room = props.selectedRoom;
 
   if (!room) {
     return false;
@@ -37,10 +41,13 @@ const messages = computed(() => {
 
   return room.messages;
 });
+
+useUiStackItem('active-room', () => {
+  roomsStore.closeSelectedRoom();
+});
 </script>
 
 <template>
-<template v-if="selectedRoom">
 
   <ChatHeader
     :room="selectedRoom" />
@@ -53,7 +60,6 @@ const messages = computed(() => {
     v-if="canWrite"
     :room="selectedRoom" />
 
-</template>
 </template>
 
 <style scoped>

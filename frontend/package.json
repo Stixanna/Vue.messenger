@@ -20,6 +20,7 @@
     "start": "npm run dev"
   },
   "dependencies": {
+    "@vueuse/core": "^14.4.0",
     "lucide-static": "^1.28.0",
     "pinia": "^3.0.4",
     "qrcode": "^1.5.4",

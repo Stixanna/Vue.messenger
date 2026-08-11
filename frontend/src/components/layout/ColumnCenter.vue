@@ -1,11 +1,21 @@
 <script setup>
+import { storeToRefs } from 'pinia';
+import { useRoomsStore } from '@/stores/roomsStore';
 import ActiveRoom from '@/components/layout/ActiveRoom.vue';
+
+const roomsStore = useRoomsStore();
+
+const {
+	selectedRoom,
+} = storeToRefs(roomsStore);
 </script>
 
 <template>
 <div
   id="column-center">
-  <ActiveRoom />
+  <ActiveRoom 
+    v-if="selectedRoom"
+    :selectedRoom="selectedRoom"/>
 </div>
 </template>
 
