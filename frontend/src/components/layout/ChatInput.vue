@@ -1,60 +1,103 @@
-<script setup>
-import { computed } from 'vue';
+<script setup lang="ts">
+import { nextTick, ref } from 'vue';
+import { useChatDraft } from '@/composables/useChatDraft';
+import { useSendMessage } from '@/composables/useSendMessage';
 import ScheduledMessagesButton from './ScheduledMessagesButton.vue';
 import AttachmentAddButton from './AttachmentAddButton.vue';
 import SendButton from './SendButton.vue';
 
-const props = defineProps({
-  room: {
-    type: Object,
-    required: true,
-  },
-  inputValue: {
-    type: String,
-    default: ''
-  }
-});
+const { message, showScheduledButton } = useChatDraft();
+const { canSend, sendMessage } = useSendMessage();
 
-const showScheduledButton = computed(() => {
-  return (
-    props.room &&
-    props.room.delayed_messages > 0 &&
-    props.inputValue === ''
-  );
-});
+const textarea = ref<HTMLTextAreaElement | null>(null);
+
+const MIN_HEIGHT = 56;
+const MAX_HEIGHT = 200;
+const EXPAND_AFTER_ROWS = 4;
+
+function resizeTextarea(): void {
+	const element = textarea.value;
+
+	if (!element) {
+		return;
+	}
+
+	const lineHeight = parseFloat(
+		getComputedStyle(element).lineHeight,
+	);
+
+	element.style.maxHeight = `${MIN_HEIGHT}px`;
+	element.style.height = 'auto';
+
+	const scrollHeight = element.scrollHeight;
+	const visibleRows = Math.round(scrollHeight / lineHeight);
+	const shouldExpand = visibleRows > EXPAND_AFTER_ROWS;
+
+	element.style.maxHeight = shouldExpand
+		? `${MAX_HEIGHT}px`
+		: `${MIN_HEIGHT}px`;
+
+	element.style.height = `${Math.min(scrollHeight, MAX_HEIGHT)}px`;
+	element.style.overflowY = scrollHeight > MAX_HEIGHT
+		? 'auto'
+		: 'hidden';
+}
+
+async function handleInput(): Promise<void> {
+	await nextTick();
+	resizeTextarea();
+}
+
+function handleKeydown(event: KeyboardEvent): void {
+	if (event.key !== 'Enter' || event.shiftKey) {
+		return;
+	}
+
+	event.preventDefault();
+
+	void sendMessage();
+}
 </script>
 
 <template>
 <div
   id="chat-input"
-  class="chat-input">
-  <div
-    id=""
-    class="chat-footer-wrapper">
+  class="chat-input"
+>
+  <div class="chat-footer-wrapper">
     <div
       id="input-wrapper"
-      class="textarea-wrapper">
+      class="textarea-wrapper"
+    >
       <div
         id="chat-input-buttons"
-        class="chat-input-buttons">
-
+        class="chat-input-buttons"
+      >
         <ScheduledMessagesButton
-          v-if="showScheduledButton" />
+          v-if="showScheduledButton"
+        />
 
         <AttachmentAddButton />
-
       </div>
-      <textarea 
-        id="message-input" 
-        spellcheck="false" 
-        type="text" 
-        autocomplete="off" 
-        maxlength="1000" 
-        placeholder="Write a message..." 
-        data-scroll-element="true" />
+
+      <textarea
+        ref="textarea"
+        id="message-input"
+        v-model="message"
+        spellcheck="false"
+        autocomplete="off"
+        maxlength="1000"
+        placeholder="Write a message..."
+        data-scroll-element="true"
+        @input="handleInput"
+        @keydown="handleKeydown"
+      ></textarea>
     </div>
 
-    <SendButton />
+    <SendButton
+      :disabled="!canSend"
+      @click="sendMessage"
+    />
   </div>
 </div>
 </template>

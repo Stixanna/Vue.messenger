@@ -40,10 +40,10 @@ export async function ToggleReaction(
 		`/message/toggle_react/`, 
 		{ 
 			method: 'POST',
-			body: JSON.stringify({
-				"message_id": message_id,
-				"reaction": reaction,
-			})
+			body: {
+				message_id: message_id,
+				reaction: reaction,
+			}
 		 }
 	);
 }
@@ -61,6 +61,86 @@ export async function FetchFile(
 		`/message/get_file_by_id/?file_id=${file_id}${download_path}${thumbnail_path}${thumbnail_size_path}`, 
 		{ 
 			method: 'GET',
+		}
+	);
+}
+
+export async function SendMessage(
+	room_id: string,
+	text: string,
+	embedMessageObject?: {
+		id: string; 
+		embed_type: string
+	} | null,
+	timestamp?: string,
+): Promise<null> {
+	const messageData: any = {
+        room_id: room_id,
+        text: text,
+    };
+
+    if (embedMessageObject){
+        const embed_message_id = embedMessageObject.id;
+        const is_embed_reply = embedMessageObject.embed_type === 'reply';
+        if(is_embed_reply)
+            messageData.in_reply_to = embed_message_id;
+    }
+    if(timestamp)
+        messageData.timestamp = timestamp;
+
+	return apiRequest(
+		`/message/send/`, 
+		{ 
+			method: 'POST',
+			body: messageData
+		 }
+	);
+}
+
+export async function EditMessage(
+	message_id: string,
+	text: string,
+): Promise<null> {
+	const messageData: any = {
+        message_id: message_id,
+        text: text,
+    };
+	return apiRequest(
+		`/message/edit/`, 
+		{ 
+			method: 'PATCH',
+			body: messageData
+		 }
+	);
+}
+
+export async function ForwardMessage(
+	from_room_id: string,
+	to_room_id: string,
+	message_ids: string[],
+): Promise<null> {
+	const messageData: any = {
+        from_room_id: from_room_id,
+        to_room_id: to_room_id,
+        forwarded_message_ids: message_ids,
+    };
+	return apiRequest(
+		`/message/forward/`, 
+		{ 
+			method: 'POST',
+			body: messageData
+		 }
+	);
+}
+
+export async function SendAttachmentMessage(
+	formData: any,
+): Promise<null> {
+	return apiRequest(
+		`/message/send_files/`,
+		{
+			method: 'POST',
+			body: formData,
 		}
 	);
 }
