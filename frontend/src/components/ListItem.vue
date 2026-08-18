@@ -69,6 +69,15 @@ function handleClick() {
   emit('click', props.item);
 }
 
+function handleContextMenu(event) {
+  event.preventDefault();
+
+  emit('contextmenu', {
+    item: props.item,
+    event,
+  });
+}
+
 const isMessage = computed(() => props.item.is_message);
 
 const roomId = computed(() =>
@@ -101,7 +110,8 @@ const relativeDate = computed(() => {
   class="chat-item"
   :class="{ active: item.selected && activateItems }"
   :data-room-id="roomId"
-  @click="handleClick">
+  @click="handleClick"
+  @contextmenu="handleContextMenu">
 
   <!-- Avatar -->
   <Avatar

@@ -2,7 +2,13 @@
 import { 
   watch, 
   onBeforeUnmount, 
+  computed,
+  nextTick,
+  ref,
 } from 'vue';
+
+import { getDynamicMenuPosition } from '@/utils/getDynamicMenuPosition';
+import { useContextMenuStore } from '@/stores/contextMenuStore';
 import MenuItem from '@/components/menus/MenuItem.vue';
 
 const props = defineProps({
@@ -10,19 +16,85 @@ const props = defineProps({
     type: Array,
     required: true,
   },
+
+  /**
+   * Внешнее состояние меню.
+   * Определяет, должно ли меню быть открыто с точки зрения родительского компонента.
+   */
   opened: {
     type: Boolean,
     required: true,
   },
+
+  /**
+   * Идентификатор типа меню
+   * Нужен для координации нескольких ContextMenu через store.
+   */
+  menuId: {
+    type: String,
+    required: true,
+  },
+
+  /**
+   * Элемент, открывающий меню.
+   * Используется для исключения клика по trigger из outside-click.
+   */
   triggerElement: {
     type: Object,
     default: null,
   },
+
+  /**
+   * Контейнер, относительно которого рассчитывается позиция динамического меню.
+   */
+  containerElement: {
+    type: Object,
+    default: null,
+  },
+
+  /**
+   * Событие, в точке которого должно открыться динамическое меню.
+   */
+  openEvent: {
+    type: MouseEvent,
+    default: null,
+  },
+
+  /**
+   * Специальная корректировка позиции для меню (хардкод) 
+   */
+  isZeroMenu: {
+    type: Boolean,
+    default: false,
+  },
 });
+
 const emit = defineEmits([
   'select',
   'close',
 ]);
+
+const contextMenuStore = useContextMenuStore();
+
+const menuElement = ref(null);
+const visible = ref(false);
+/**
+ * Показывает, что меню нужно открыть повторно после завершения
+ * leave-анимации.
+ */
+const pendingOpen = ref(false);
+const menuPosition = ref(null);
+
+const menuPositionStyle = computed(() => {
+  if (!menuPosition.value) {
+    return {};
+  }
+
+  return {
+    top: `${menuPosition.value.top}px`,
+    left: `${menuPosition.value.left}px`,
+  };
+});
 
 function handleItemClick(item) {
   emit('select', item);
@@ -30,14 +102,13 @@ function handleItemClick(item) {
 }
 
 function handleOutsideClick(event) {
-  if (event.button !== 0) return;
+  if (event.button !== 0) {
+    return;
+  }
 
-  const target = event.target;
-
-  // Клик по кнопке, которая открывает меню.
   if (
     props.triggerElement &&
-    props.triggerElement.contains(target)
+    props.triggerElement.contains(event.target)
   ) {
     return;
   }
@@ -45,37 +116,141 @@ function handleOutsideClick(event) {
   emit('close');
 }
 
+async function updateMenuPosition() {
+  await nextTick();
+
+  if (
+    !menuElement.value ||
+    !props.containerElement ||
+    !props.openEvent
+  ) {
+    return;
+  }
+
+  const menuSize = {
+    width: menuElement.value.offsetWidth,
+    height: menuElement.value.offsetHeight,
+  };
+
+  menuPosition.value = getDynamicMenuPosition({
+    event: props.openEvent,
+    container: props.containerElement,
+    menuSize,
+    isZeroMenu: props.isZeroMenu,
+  });
+}
+
+async function showMenu() {
+  visible.value = true;
+  await updateMenuPosition();
+}
+
+function hideMenu() {
+  visible.value = false;
+}
+
+async function handleAfterLeave() {
+  if (!pendingOpen.value) {
+    return;
+  }
+
+  pendingOpen.value = false;
+
+  await showMenu();
+}
+
+/**
+ * Новая точка открытия.
+ *
+ * Если это уже открытое меню — запускаем
+ * leave → расчёт новой позиции → enter.
+ */
+watch(
+  () => props.openEvent,
+  async (event) => {
+    if (!props.opened || !event) {
+      return;
+    }
+
+    if (visible.value) {
+      pendingOpen.value = true;
+      hideMenu();
+
+      return;
+    }
+
+    await showMenu();
+  },
+);
+
+/**
+ * Управляет жизненным циклом конкретного меню.
+ */
 watch(
   () => props.opened,
-  (opened) => {
+  async (opened) => {
     if (opened) {
       window.addEventListener('click', handleOutsideClick);
-    } 
-    else {
-      window.removeEventListener('click', handleOutsideClick);
+
+      contextMenuStore.openMenu(props.menuId);
+
+      if (!visible.value) {
+        await showMenu();
+      }
+
+      return;
+    }
+
+    window.removeEventListener('click', handleOutsideClick);
+
+    pendingOpen.value = false;
+    hideMenu();
+
+    contextMenuStore.closeMenu(props.menuId);
+  },
+);
+
+/**
+ * Когда другое меню становится активным,
+ * текущий экземпляр закрывается.
+ */
+watch(
+  () => contextMenuStore.activeMenuId,
+  (activeMenuId) => {
+    if (
+      activeMenuId !== props.menuId &&
+      visible.value
+    ) {
+      pendingOpen.value = false;
+      hideMenu();
     }
   },
 );
 
 onBeforeUnmount(() => {
   window.removeEventListener('click', handleOutsideClick);
+
+  contextMenuStore.closeMenu(props.menuId);
 });
 </script>
 
 <template>
 <Transition
   name="slide-from-left"
-  appear>
+  appear
+  @after-leave="handleAfterLeave">
   <div
-    v-if="opened"
+    v-if="visible"
+    ref="menuElement"
     class="context-menu menu"
-    style="z-index: 2;"
+    :style="menuPositionStyle"
     @click.stop>
     <MenuItem
       v-for="item in items"
       :key="item.id"
       :item="item"
-      @click="handleItemClick" />
+      @click="handleItemClick"
+    />
   </div>
 </Transition>
 </template>
@@ -83,6 +258,7 @@ onBeforeUnmount(() => {
 <style scoped>
 .context-menu {
   position: absolute;
+  z-index: 1000;
   cursor: auto;
   pointer-events: auto;
   color: var(--text-color);

@@ -45,6 +45,7 @@ function onItemSelect(item) {
 
   <ContextMenu
     name="slide-from-left"
+    menu-id="main-context-menu"
     :opened="menuOpened"
     :items="items"
     :trigger-element="menuButton"

@@ -1,11 +1,16 @@
 <script setup>
 import {
   computed,
+  ref,
 } from 'vue';
 import {
   useRoomsStore,
 } from '@/stores/roomsStore';
+import {
+  menuText
+} from '@/constants/menuText';
 import ListItem from '@/components/ListItem.vue';
+import ContextMenu from '../menus/ContextMenu.vue';
 
 const props = defineProps({
   treeView: {
@@ -25,6 +30,15 @@ const props = defineProps({
 });
 
 const roomsStore = useRoomsStore();
+const menuOpened = ref(false);
+const contextMenuRoom = ref(null);
+const menuOpenEvent = ref(null);
+const containerElement = ref(null);
+
+function openMenu(event) {
+  menuOpenEvent.value = event;
+  menuOpened.value = true;
+}
 
 const TEXT_VALS = {
   archive_text: "Архив",
@@ -66,13 +80,68 @@ async function handleRoomClick(room) {
 
   await roomsStore.selectRoom(room.id);
 }
+
+const menuItems = computed(() => {
+  const room = contextMenuRoom.value;
+
+  if (!room) {
+    return [];
+  }
+
+  return [
+    {
+      id: 'mute_room',
+      value: room.is_notifications
+        ? menuText.roomList.muteRoom.switchOff
+        : menuText.roomList.muteRoom.switchOn,
+      icon: room.is_notifications
+        ? 'nobell'
+        : 'bell',
+    },
+    {
+      id: 'archive_room',
+      value: room.is_archived
+        ? menuText.roomList.archiveRoom.toActual
+        : menuText.roomList.archiveRoom.toArchive,
+      icon: room.is_archived
+        ? 'unarchive'
+        : 'archive',
+    },
+    {
+      id: 'leave_room',
+      value: menuText.roomList.leaveRoom,
+      icon: 'nouser',
+    },
+  ];
+});
+
+function handleRoomContextMenu({ item, event }) {
+  if (item.id === 'archive') {
+    return;
+  }
+
+  contextMenuRoom.value = item;
+  openMenu(event);
+}
+
+function handleMenuClose() {
+  menuOpened.value = false;
+  contextMenuRoom.value = null;
+}
+
+function onItemSelect(item) {
+  console.log('Selected menu item:', item);
+
+  handleMenuClose();
+}
 </script>
 
 <template>
 <div
   id="row-list"
   class="row-list"
-  data-menu-position-container>
+  data-menu-position-container
+  ref="containerElement">
   <div
     id="chat-list"
     class="chat-list">
@@ -80,12 +149,27 @@ async function handleRoomClick(room) {
       v-for="room in correctedRooms"
       :key="room.id"
       :item="room"
-      @click="handleRoomClick" />
+      @click="handleRoomClick" 
+      @contextmenu="handleRoomContextMenu"
+      />
   </div>
 
   <div
     id="message-list"
     class="chat-list" />
+
+  <ContextMenu
+    name="slide-from-left"
+    menu-id="room-context-menu"
+    :opened="menuOpened"
+    :items="menuItems"
+    :open-event="menuOpenEvent"
+    :container-element="containerElement"
+
+    @select="onItemSelect"
+    @close="handleMenuClose" 
+  />
+
 </div>
 </template>
 
