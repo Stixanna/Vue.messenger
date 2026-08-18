@@ -1,7 +1,9 @@
 <script setup>
 import {
   ref,
+  computed,
 } from 'vue';
+import { useContextMenuStore } from '@/stores/contextMenuStore';
 import ContextMenu from '@/components/menus/ContextMenu.vue';
 import BaseIcon from '../BaseIcon.vue';
 
@@ -12,16 +14,30 @@ const props = defineProps({
   },
 });
 
+const contextMenuStore = useContextMenuStore();
+const menuId = 'main-context-menu';
+
 const emit = defineEmits([
   'select',
   'close',
 ]);
 
-const menuOpened = ref(false);
 const menuButton = ref(null);
 
+const menuOpened = computed(() => {
+  return contextMenuStore.activeMenuId === menuId;
+});
+
 function toggleMenu() {
-  menuOpened.value = !menuOpened.value;
+  if(menuOpened.value) {
+    contextMenuStore.closeMenu(menuId);
+  } else {
+    contextMenuStore.openMenu(menuId);
+  }
+}
+
+function handleMenuClose() {
+  contextMenuStore.closeMenu(menuId);
 }
 
 function onItemSelect(item) {
@@ -45,12 +61,12 @@ function onItemSelect(item) {
 
   <ContextMenu
     name="slide-from-left"
-    menu-id="main-context-menu"
+    :menu-id="menuId"
     :opened="menuOpened"
     :items="items"
     :trigger-element="menuButton"
     @select="onItemSelect"
-    @close="menuOpened = false" />
+    @close="handleMenuClose" />
 </div>
 </template>
 

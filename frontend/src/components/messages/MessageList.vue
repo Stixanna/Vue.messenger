@@ -9,6 +9,7 @@ import {
 import MessageDateGroup from '@/components/messages/MessageDateGroup.vue';
 import ContextMenu from '../menus/ContextMenu.vue';
 
+import { useContextMenuStore } from '@/stores/contextMenuStore';
 import { useRoomsStore } from '@/stores/roomsStore';
 import { useUsersStore } from '@/stores/usersStore';
 import { groupMessages } from '@/utils/messages/groupMessages';
@@ -26,6 +27,7 @@ const props = defineProps({
   },
 });
 
+const contextMenuStore = useContextMenuStore();
 const roomsStore = useRoomsStore();
 const usersStore = useUsersStore();
 
@@ -81,9 +83,14 @@ function scrollToInitialPosition() {
 /*
  * Context menu
  */
-const menuOpened = ref(false);
 const contextMenuMessage = ref(null);
 const menuOpenEvent = ref(null);
+
+const menuId = 'message-context-menu';
+
+const menuOpened = computed(() => {
+  return contextMenuStore.activeMenuId === menuId;
+});
 
 const menuItems = computed(() => {
   const message = contextMenuMessage.value;
@@ -174,13 +181,13 @@ const menuItems = computed(() => {
 });
 
 function handleMessageContextMenu({ item, event }) {
+  contextMenuStore.openMenu(menuId);
   contextMenuMessage.value = item;
   menuOpenEvent.value = event;
-  menuOpened.value = true;
 }
 
 function handleMenuClose() {
-  menuOpened.value = false;
+  contextMenuStore.closeMenu(menuId);
   contextMenuMessage.value = null;
   menuOpenEvent.value = null;
 }
@@ -249,7 +256,7 @@ watch(
 
     <ContextMenu
       name="slide-from-left"
-      menu-id="message-context-menu"
+      :menu-id="menuId"
       :opened="menuOpened"
       :items="menuItems"
       :open-event="menuOpenEvent"

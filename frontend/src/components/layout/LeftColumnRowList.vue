@@ -6,6 +6,7 @@ import {
 import {
   useRoomsStore,
 } from '@/stores/roomsStore';
+import { useContextMenuStore } from '@/stores/contextMenuStore';
 import {
   menuText
 } from '@/constants/menuText';
@@ -29,21 +30,23 @@ const props = defineProps({
   },
 });
 
+const contextMenuStore = useContextMenuStore();
 const roomsStore = useRoomsStore();
-const menuOpened = ref(false);
+
 const contextMenuRoom = ref(null);
 const menuOpenEvent = ref(null);
 const containerElement = ref(null);
-
-function openMenu(event) {
-  menuOpenEvent.value = event;
-  menuOpened.value = true;
-}
 
 const TEXT_VALS = {
   archive_text: "Архив",
   empty_list_text: "Пустой список",
 }
+
+const menuId = 'room-context-menu';
+
+const menuOpened = computed(() => {
+  return contextMenuStore.activeMenuId === menuId;
+});
 
 const correctedRooms = computed(() => {
   const visibleRooms = roomsStore.visibleRooms;
@@ -120,17 +123,19 @@ function handleRoomContextMenu({ item, event }) {
     return;
   }
 
+  contextMenuStore.openMenu(menuId);
   contextMenuRoom.value = item;
-  openMenu(event);
+  menuOpenEvent.value = event;
 }
 
 function handleMenuClose() {
-  menuOpened.value = false;
+  contextMenuStore.closeMenu(menuId);
   contextMenuRoom.value = null;
 }
 
 function onItemSelect(item) {
   console.log('Selected menu item:', item);
+  console.log('Selected contextMenuRoom:', contextMenuRoom.value);
 
   handleMenuClose();
 }
@@ -160,7 +165,7 @@ function onItemSelect(item) {
 
   <ContextMenu
     name="slide-from-left"
-    menu-id="room-context-menu"
+    :menu-id="menuId"
     :opened="menuOpened"
     :items="menuItems"
     :open-event="menuOpenEvent"
