@@ -18,6 +18,7 @@ const emit = defineEmits([
 ]);
 
 const menuOpened = ref(false);
+const menuButton = ref(null);
 
 function toggleMenu() {
   menuOpened.value = !menuOpened.value;
@@ -31,6 +32,7 @@ function onItemSelect(item) {
 
 <template>
 <div
+  ref="menuButton"
   @click="toggleMenu"
   id="menu_btn"
   class="btn-container">
@@ -45,6 +47,7 @@ function onItemSelect(item) {
     name="slide-from-left"
     :opened="menuOpened"
     :items="items"
+    :trigger-element="menuButton"
     @select="onItemSelect"
     @close="menuOpened = false" />
 </div>

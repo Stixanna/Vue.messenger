@@ -1,7 +1,11 @@
 <script setup>
+import { 
+  watch, 
+  onBeforeUnmount, 
+} from 'vue';
 import MenuItem from '@/components/menus/MenuItem.vue';
 
-defineProps({
+const props = defineProps({
   items: {
     type: Array,
     required: true,
@@ -9,6 +13,10 @@ defineProps({
   opened: {
     type: Boolean,
     required: true,
+  },
+  triggerElement: {
+    type: Object,
+    default: null,
   },
 });
 const emit = defineEmits([
@@ -20,6 +28,38 @@ function handleItemClick(item) {
   emit('select', item);
   emit('close');
 }
+
+function handleOutsideClick(event) {
+  if (event.button !== 0) return;
+
+  const target = event.target;
+
+  // Клик по кнопке, которая открывает меню.
+  if (
+    props.triggerElement &&
+    props.triggerElement.contains(target)
+  ) {
+    return;
+  }
+
+  emit('close');
+}
+
+watch(
+  () => props.opened,
+  (opened) => {
+    if (opened) {
+      window.addEventListener('click', handleOutsideClick);
+    } 
+    else {
+      window.removeEventListener('click', handleOutsideClick);
+    }
+  },
+);
+
+onBeforeUnmount(() => {
+  window.removeEventListener('click', handleOutsideClick);
+});
 </script>
 
 <template>
