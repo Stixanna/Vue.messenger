@@ -8,6 +8,19 @@ defineProps({
     required: true,
   },
 });
+
+const emit = defineEmits([
+  'contextmenu',
+]);
+
+function handleContextMenu({ item, event }) {
+    event.preventDefault();
+
+    emit('contextmenu', {
+      item,
+      event,
+    });
+}
 </script>
 
 <template>
@@ -20,7 +33,9 @@ defineProps({
   <MessageBubble
     v-for="message in group.messages"
     :key="message.id"
-    :message="message" />
+    :message="message" 
+    @contextmenu="handleContextMenu" 
+    />
 
 </div>
 </template>

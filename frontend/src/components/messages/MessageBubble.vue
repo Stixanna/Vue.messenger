@@ -68,6 +68,19 @@ const isFileMessage = computed(() => {
 
   return !first.type.startsWith('image/');
 });
+
+const emit = defineEmits([
+  'contextmenu',
+]);
+
+function handleMessageContextMenu(event) {
+    event.preventDefault();
+
+    emit('contextmenu', {
+      item: props.message,
+      event,
+    });
+}
 </script>
 
 <template>
@@ -78,7 +91,9 @@ const isFileMessage = computed(() => {
   :data-peer-id="message.from?.id ?? 'systemid'"
   :data-timestamp="message.timestamp"
   :data-is-forwarded="message.is_forwarded || null"
-  :data-read="message.is_read ? 'true' : 'false'">
+  :data-read="message.is_read ? 'true' : 'false'"
+  @contextmenu="handleMessageContextMenu"
+>
 
   <template v-if="message.from">
 

@@ -8,6 +8,19 @@ defineProps({
     required: true,
   },
 });
+
+const emit = defineEmits([
+  'contextmenu',
+]);
+
+function handleContextMenu({ item, event }) {
+    event.preventDefault();
+
+    emit('contextmenu', {
+      item,
+      event,
+    });
+}
 </script>
 
 <template>
@@ -24,7 +37,8 @@ defineProps({
   <BubbleGroup
     v-for="(bubble, index) in group.groups"
     :key="index"
-    :group="bubble" />
+    :group="bubble"
+    @contextmenu="handleContextMenu" />
 
 </div>
 </template>
