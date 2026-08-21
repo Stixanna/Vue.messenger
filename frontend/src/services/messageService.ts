@@ -52,7 +52,7 @@ export async function FetchFile(
 	file_id: string,
 	is_download: boolean,
 	is_thumbnail: boolean,
-	thumbnail_size: boolean,
+	thumbnail_size: number,
 ): Promise<any> {
     const download_path = is_download ? `&download=${is_download}` : '';
     const thumbnail_path = is_thumbnail ? `&thumbnail=${is_thumbnail}` : '';
