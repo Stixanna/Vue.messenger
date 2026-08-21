@@ -81,7 +81,6 @@ const thumbStyle = computed(() => {
 .attachment-thumb {
   min-height: 100px;
   min-width: 100px;
-  border-radius: 8px;
 }
 
 .attachment-placeholder {

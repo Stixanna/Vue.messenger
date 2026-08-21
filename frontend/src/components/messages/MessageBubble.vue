@@ -270,6 +270,7 @@ function handleMessageContextMenu(event) {
   --border-radius: .625rem;
   min-width: 56px;
   max-width: 100%;
+  overflow: hidden;
   border-start-start-radius: var(--border-radius);
   border-start-end-radius: var(--border-radius);
   border-end-start-radius: var(--border-radius);

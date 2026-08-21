@@ -28,7 +28,7 @@ defineProps({
   display: flex;
   flex-direction: column;
   align-items:flex-end;
-  gap: 1px;
+  gap: 2px;
   pointer-events: auto;
 }
 </style>

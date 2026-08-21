@@ -2097,7 +2097,7 @@ textarea.input-field-input {
 }
 
 .attachment-item {
-  border-radius: var(--border-radius);
+  /* border-radius: var(--border-radius); */
   overflow: hidden;
   position: relative;
 
@@ -2177,7 +2177,7 @@ textarea.input-field-input {
 }
 
 .attachment-item.image {
-  background: var(--secondary-color);
+  /* background: var(--secondary-color); */
   justify-content: center;
 }
 
