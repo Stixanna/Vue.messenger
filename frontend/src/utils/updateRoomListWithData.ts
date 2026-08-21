@@ -22,7 +22,7 @@ type MessageDelete = RequestedMessage & {
   type: 'message_delete';
 };
 
-type TagUpdate = Tag & {
+type TagUpdate = {
   type: 'tag_rename';
   old_name: string, 
   new_name: string
