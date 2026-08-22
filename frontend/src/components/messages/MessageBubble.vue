@@ -1,6 +1,6 @@
 <script setup>
 import { computed } from 'vue';
-import MessageReply from '@/components/messages/MessageReply.vue';
+import EmbedMessage from '@/components/messages/EmbedMessage.vue';
 import Avatar from '@/components/Avatar.vue';
 import MessageAttachments from '@/components/messages/MessageAttachments.vue';
 import MessageReactions from '@/components/messages/MessageReactions.vue';
@@ -8,6 +8,8 @@ import MessageForward from '@/components/messages/MessageForward.vue';
 import { useUsersStore } from '@/stores/usersStore';
 import { formatTimestamp } from '@/utils/formatTimestamp';
 import { formatTextWithLinks } from '@/utils/formatTextWithLinks';
+// import { highlightMessage } from '@/utils/messages/highlightMessage';
+// import { scrollIntoMessage } from '@/utils/messages/scrollIntoMessage';
 
 const props = defineProps({
   message: {
@@ -47,6 +49,10 @@ const updatedTimestamp = computed(() => {
     null;
 });
 
+const repliedMessage = computed(() => {
+  return props.message.replied_message;
+});
+
 const messageClasses = computed(() => ({
   'is-out': isOutgoing.value,
   'is-in': !isOutgoing.value,
@@ -80,6 +86,25 @@ function handleMessageContextMenu(event) {
       item: props.message,
       event,
     });
+}
+
+function handleEmbedClick(embedMessage) {
+  console.log('click_reply', embedMessage)
+
+  // const repliedId = props.message.in_reply_to;
+
+  // const target = document.querySelector(
+  //   `[data-mid="${repliedId}"]`,
+  // );
+
+  // if (target) {
+  //   highlightMessage(target);
+  //   return;
+  // }
+
+  // scrollIntoMessage({
+  //   id: repliedId,
+  // });
 }
 </script>
 
@@ -115,9 +140,10 @@ function handleMessageContextMenu(event) {
           </span>
         </div>
 
-        <MessageReply
+        <EmbedMessage
           v-if="message.in_reply_to"
-          :message="message" />
+          @click="handleEmbedClick(repliedMessage)"
+          :message="repliedMessage" />
 
         <MessageForward
           v-else-if="message.forwarded_from_user_id"

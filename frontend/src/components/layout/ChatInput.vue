@@ -1,12 +1,20 @@
 <script setup lang="ts">
 import { nextTick, ref } from 'vue';
+import { useDraftMessageStore } from '@/stores/draftMessageStore';
 import { useChatDraft } from '@/composables/useChatDraft';
 import { useSendMessage } from '@/composables/useSendMessage';
 import ScheduledMessagesButton from './ScheduledMessagesButton.vue';
 import AttachmentAddButton from './AttachmentAddButton.vue';
 import SendButton from './SendButton.vue';
+import EmbedMessage from '../messages/EmbedMessage.vue';
 
-const { message, showScheduledButton } = useChatDraft();
+const { 
+  message, 
+  showScheduledButton,
+  embedMessage, 
+} = useChatDraft();
+const draftMessageStore = useDraftMessageStore();
+
 const { canSend, sendMessage } = useSendMessage();
 
 const textarea = ref<HTMLTextAreaElement | null>(null);
@@ -57,6 +65,10 @@ function handleKeydown(event: KeyboardEvent): void {
 
 	void sendMessage();
 }
+
+async function handleEmbedCancel() {
+  draftMessageStore.setEmbedMessage(null)
+}
 </script>
 
 <template>
@@ -69,6 +81,13 @@ function handleKeydown(event: KeyboardEvent): void {
       id="input-wrapper"
       class="textarea-wrapper"
     >
+      <EmbedMessage 
+        v-if="embedMessage"
+        :message="embedMessage"
+        :embed-type="embedMessage.embed_type"
+        @cancel="handleEmbedCancel"
+      />
+      
       <div
         id="chat-input-buttons"
         class="chat-input-buttons"

@@ -9,6 +9,7 @@ import {
 import MessageDateGroup from '@/components/messages/MessageDateGroup.vue';
 import ContextMenu from '../menus/ContextMenu.vue';
 
+import { useDraftMessageStore } from '@/stores/draftMessageStore';
 import { useContextMenuStore } from '@/stores/contextMenuStore';
 import { useRoomsStore } from '@/stores/roomsStore';
 import { useUsersStore } from '@/stores/usersStore';
@@ -30,6 +31,7 @@ const props = defineProps({
 const contextMenuStore = useContextMenuStore();
 const roomsStore = useRoomsStore();
 const usersStore = useUsersStore();
+const draftMessageStore = useDraftMessageStore();
 
 const containerElement = ref(null);
 
@@ -138,7 +140,7 @@ const menuItems = computed(() => {
     //   : null,
     !isMessageDelayed
       ? {
-          id: 'reply_message',
+          id: 'reply',
           icon: 'reply',
           value: menuText.message.replyMessage,
         }
@@ -148,7 +150,7 @@ const menuItems = computed(() => {
     isUserMessageOwner &&
     isMessageNotForwarded
       ? {
-          id: 'edit_message',
+          id: 'edit',
           icon: 'edit',
           value: menuText.message.editMessage,
         }
@@ -162,7 +164,7 @@ const menuItems = computed(() => {
 
     !isMessageDelayed
       ? {
-          id: 'forward_message',
+          id: 'forward',
           icon: 'forward',
           value: menuText.message.forwardMessage,
         }
@@ -193,10 +195,29 @@ function handleMenuClose() {
 }
 
 function handleMenuItemSelect(item) {
+  const selectedMessage = contextMenuMessage.value;
+  switch(item.id){
+    case 'reply':
+    case 'edit':
+    case 'forward':
+      selectedMessage.embed_type = item.id;
+      draftMessageStore.setEmbedMessage(selectedMessage);
+      break;
+
+    case 'copy_message':
+      console.log('Copy message text:', selectedMessage.text);
+      break;
+
+    case 'delete_message':
+      console.log('Delete message:', selectedMessage);
+      break;
+
+  }
+
   console.log('Selected menu item:', item);
   console.log(
     'Selected contextMenuMessage:',
-    contextMenuMessage.value,
+    selectedMessage,
   );
 
   handleMenuClose();

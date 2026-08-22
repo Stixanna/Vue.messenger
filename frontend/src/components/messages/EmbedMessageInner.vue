@@ -10,15 +10,10 @@ const props = defineProps({
     type: Object,
     required: true,
   },
-
-  embedType: {
-    type: String,
-    // default: 'reply',
-  },
 });
 
 const embedMessage = computed(() => {
-  return props.message.replied_message;
+  return props.message;
 });
 
 const isNotFound = computed(() => {
@@ -34,6 +29,7 @@ const title = computed(() => {
 });
 
 const text = computed(() => {
+  // console.log(props.message)
   if (isNotFound.value) {
     return '---';
   }
@@ -45,71 +41,56 @@ const hasAttachment = computed(() => {
   return embedMessage.value?.attachments?.length > 0;
 });
 
-const emit = defineEmits([
-  'click',
-]);
+// const emit = defineEmits([
+//   'click',
+// ]);
 
-function handleClick() {
-  console.log('reply_click')
-  emit('click', props.message.in_reply_to);
-  // const repliedId = props.message.in_reply_to;
+// function handleClick() {
+//   console.log('reply_click')
+//   emit('click', props.message.in_reply_to);
+//   // const repliedId = props.message.in_reply_to;
 
-  // const target = document.querySelector(
-  //   `[data-mid="${repliedId}"]`,
-  // );
+//   // const target = document.querySelector(
+//   //   `[data-mid="${repliedId}"]`,
+//   // );
 
-  // if (target) {
-  //   highlightMessage(target);
-  //   return;
-  // }
+//   // if (target) {
+//   //   highlightMessage(target);
+//   //   return;
+//   // }
 
-  // scrollIntoMessage({
-  //   id: repliedId,
-  // });
-}
+//   // scrollIntoMessage({
+//   //   id: repliedId,
+//   // });
+// }
 </script>
 
 <template>
 <div
-  id="embedded-message-container"
-  class="embedded-message-container"
-  :type="embedType"
-  @click="handleClick">
+  class="embedded-message">
+
   <div
-    class="embedded-message-icon-text">
-    <BaseIcon
-      v-if="embedType && !isNotFound"
-      :name="embedType"
-      id="embedded-left-icon" />
+    class="hover-effect" />
+
+  <div
+    class="embed-text-wrapper no-selection">
+
     <div
-      class="embedded-message">
+      class="embed-text-title">
+      {{ title }}
+    </div>
 
-      <div
-        class="hover-effect" />
+    <div
+      class="embed-text-text">
 
-      <div
-        class="embed-text-wrapper no-selection">
+      <BaseIcon
+        v-if="hasAttachment"
+        name="image"
+        id="embedded-left-icon" />
 
-        <div
-          class="embed-text-title">
-          {{ title }}
-        </div>
-
-        <div
-          class="embed-text-text">
-
-          <BaseIcon
-            v-if="hasAttachment"
-            name="image"
-            id="embedded-left-icon" />
-
-          <span>
-            {{ text }}
-          </span>
-
-        </div>
-
-      </div>
+      <span>
+        {{ text }}
+      </span>
 
     </div>
 
@@ -119,6 +100,32 @@ function handleClick() {
 </template>
 
 <style scoped>
+
+.chat-input .embedded-message {
+  position: relative;
+  top: 0.5rem;
+  width: 100%;
+  margin-inline: 1.5rem;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.embed-text-wrapper {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  pointer-events: none;
+  padding: 0.5rem;
+  border-left: 4px solid var(--avatar-color);
+  border-radius: 0.25rem;
+}
+
+.chat-input .embedded-message .embed-text-wrapper {
+  margin-bottom: 0.5rem;
+}
 
 .bubble .embedded-message {
   height: var(--embed-height);
@@ -153,12 +160,15 @@ function handleClick() {
   text-overflow: ellipsis;
 }
 
+.embed-text-title{
+  color: var(--text-color);
+}
 .bubble .embed-text-title {
   color: var(--message-time-color);
   font-weight: bold;
 }
 
-.chat-input #embedded-left-icon {
+/* .chat-input #embedded-left-icon {
   position: relative;
   top: 1rem;
   left: 1rem;
@@ -171,7 +181,7 @@ function handleClick() {
   font-size: 1.5rem;
   color: var(--text-color);
   pointer-events: none;
-}
+} */
 
 .embedded-message .hover-effect {
   position: absolute;

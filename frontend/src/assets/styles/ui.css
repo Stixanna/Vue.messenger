@@ -714,51 +714,9 @@
   user-select: none;
 }
 
-.chat-input .embedded-message {
-  position: relative;
-  top: 0.5rem;
-  width: 100%;
-  margin-inline: 1.5rem;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-}
-
-.chat-input .embedded-cancel {
-  position: relative;
-  top: 1rem;
-  right: 1rem;
-  bottom: var(--border-radius-messages);
-  background: none;
-  border: none;
-  font-size: 1.5rem;
-  cursor: pointer;
-  color: var(--text-color);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.embedded-message .embed-text-wrapper {
-  height: 100%;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  pointer-events: none;
-  padding: 0.5rem;
-  border-left: 4px solid var(--avatar-color);
-  border-radius: 0.25rem;
-}
-
 .bubble .embedded-message .embed-text-wrapper,
 .bubble .forwarded-container {
   padding: 0.25rem 0.5rem;
-}
-
-.chat-input .embedded-message .embed-text-wrapper {
-  /* не понимаю почему нормально не наследуется высота */
-  margin-bottom: 0.5rem;
 }
 
 .embed-text-wrapper .embed-text-text,

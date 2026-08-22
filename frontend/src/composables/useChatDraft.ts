@@ -18,6 +18,10 @@ export function useChatDraft() {
     return message.value.trim().length > 0;
   });
 
+  const embedMessage = computed(() => {
+    return draftStore.embedMessage;
+  });
+
   const showScheduledButton = computed(() => {
     const room = roomsStore.selectedRoom;
 
@@ -31,6 +35,7 @@ export function useChatDraft() {
 
   return {
     message,
+    embedMessage,
     hasMessage,
     showScheduledButton,
   };
