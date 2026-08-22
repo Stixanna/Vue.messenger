@@ -19,11 +19,6 @@ const props = defineProps({
     type: String,
     default: '',
   },
-
-  theme: {
-    type: Boolean,
-    default: false,
-  },
 });
 
 
@@ -47,13 +42,9 @@ function handleChange(event) {
   <input
     :id="id"
     class="toggle-checkbox"
-    :class="{
-      'theme-checkbox': theme,
-    }"
     type="checkbox"
     :checked="modelValue"
     @change="handleChange" />
-
 
   <label
     class="toggle_area"
