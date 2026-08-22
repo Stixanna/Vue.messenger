@@ -1,5 +1,9 @@
 <script setup lang="ts">
-import { nextTick, ref } from 'vue';
+import { 
+  nextTick, 
+  ref,
+  watch,
+ } from 'vue';
 import { useDraftMessageStore } from '@/stores/draftMessageStore';
 import { useChatDraft } from '@/composables/useChatDraft';
 import { useSendMessage } from '@/composables/useSendMessage';
@@ -51,10 +55,13 @@ function resizeTextarea(): void {
 		: 'hidden';
 }
 
-async function handleInput(): Promise<void> {
-	await nextTick();
-	resizeTextarea();
-}
+watch(
+  message,
+  async () => {
+    await nextTick();
+    resizeTextarea()
+  },
+);
 
 function handleKeydown(event: KeyboardEvent): void {
 	if (event.key !== 'Enter' || event.shiftKey) {
@@ -112,7 +119,6 @@ async function handleEmbedCancel() {
         maxlength="1000"
         placeholder="Write a message..."
         data-scroll-element="true"
-        @input="handleInput"
         @keydown="handleKeydown"
       ></textarea>
     </div>
