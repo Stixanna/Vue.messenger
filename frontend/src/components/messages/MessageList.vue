@@ -200,9 +200,15 @@ function handleMenuItemSelect(item) {
   const selectedMessage = contextMenuMessage.value;
   switch(item.id){
     case 'reply':
-    case 'edit':
     case 'forward':
       selectedMessage.embed_type = item.id;
+      draftMessageStore.setEmbedMessage(selectedMessage);
+      break;
+      
+    case 'edit':
+      selectedMessage.embed_type = item.id;
+      draftMessageStore.setCachedMessage();
+      draftMessageStore.setText(selectedMessage.text);
       draftMessageStore.setEmbedMessage(selectedMessage);
       break;
 

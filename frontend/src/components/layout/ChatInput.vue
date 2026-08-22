@@ -67,7 +67,11 @@ function handleKeydown(event: KeyboardEvent): void {
 }
 
 async function handleEmbedCancel() {
-  draftMessageStore.setEmbedMessage(null)
+  if(embedMessage.value!.embed_type === 'edit'){
+    const prevText = draftMessageStore.cachedMessage?.text;
+    draftMessageStore.setText(prevText ?? '');
+  }
+  draftMessageStore.setEmbedMessage(null);
 }
 </script>
 

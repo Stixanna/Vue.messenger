@@ -47,15 +47,22 @@ export function useSendMessage() {
     switch (embed.embed_type) {
       case 'reply':
         await sendReply(text, embed);
+        draftStore.clear();
         break;
 
       case 'forward':
         await sendForward(text, embed);
+        draftStore.clear();
         break;
 
       case 'edit':
         await sendEdit(text, embed);
+
+        const prevText = draftStore.cachedMessage?.text;
+        draftStore.setText(prevText ?? '');
+        draftStore.setEmbedMessage(null);
         break;
+
     }
   }
 
@@ -64,7 +71,6 @@ export function useSendMessage() {
     embed: NonNullable<typeof draftStore.embedMessage>,
   ): Promise<void> {
     await loadSendMessage(text, embed);
-    draftStore.clear();
   }
 
   async function sendForward(
@@ -84,8 +90,6 @@ export function useSendMessage() {
     if (text || draftStore.attachments.length > 0) {
       await loadSendMessage(text);
     }
-
-    draftStore.clear();
   }
 
   async function sendEdit(
@@ -97,8 +101,6 @@ export function useSendMessage() {
     if (text !== previousText) {
       await loadEditMessage(embed.id, text);
     }
-
-    draftStore.clear();
   }
 
   return {
