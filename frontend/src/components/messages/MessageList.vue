@@ -207,7 +207,10 @@ function handleMenuItemSelect(item) {
       
     case 'edit':
       selectedMessage.embed_type = item.id;
-      draftMessageStore.setCachedMessage();
+      draftMessageStore.setCachedMessage({
+        text :draftMessageStore.text, 
+        embedMessageObject: draftMessageStore.embedMessage
+      });
       draftMessageStore.setText(selectedMessage.text);
       draftMessageStore.setEmbedMessage(selectedMessage);
       break;

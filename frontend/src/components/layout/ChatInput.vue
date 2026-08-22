@@ -73,12 +73,23 @@ function handleKeydown(event: KeyboardEvent): void {
 	void sendMessage();
 }
 
-async function handleEmbedCancel() {
-  if(embedMessage.value!.embed_type === 'edit'){
-    const prevText = draftMessageStore.cachedMessage?.text;
-    draftMessageStore.setText(prevText ?? '');
+function handleEmbedCancel() {
+  const cachedMessage = draftMessageStore.cachedMessage;
+
+  if (!cachedMessage) {
+    draftMessageStore.setEmbedMessage(null);
+    return;
   }
-  draftMessageStore.setEmbedMessage(null);
+
+  if (embedMessage.value?.embed_type === 'edit') {
+    draftMessageStore.setText(cachedMessage.text ?? '');
+  }
+
+  draftMessageStore.setEmbedMessage(
+    cachedMessage.embedMessageObject ?? null,
+  );
+
+  draftMessageStore.setCachedMessage();
 }
 </script>
 

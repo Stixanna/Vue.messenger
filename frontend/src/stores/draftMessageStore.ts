@@ -8,14 +8,16 @@ export interface EmbedMessage {
   embed_room_id?: string;
 }
 
+export interface CachedMessage {
+  text: string;
+  embedMessageObject: EmbedMessage | null;
+}
+
 export interface DraftMessage {
   text: string;
   attachments: File[];
   embedMessage: EmbedMessage | null;
-  cachedMessage: {
-    text: string;
-    embedMessageObject: EmbedMessage | null;
-  } | null;
+  cachedMessage: CachedMessage | null;
 }
 
 export const useDraftMessageStore = defineStore('draftMessage', () => {
@@ -23,7 +25,7 @@ export const useDraftMessageStore = defineStore('draftMessage', () => {
   const attachments = ref<File[]>([]);
   const embedMessage = ref<EmbedMessage | null>(null);
 
-  const cachedMessage = ref<DraftMessage['cachedMessage']>(null);
+  const cachedMessage = ref<DraftMessage['cachedMessage'] | null>(null);
 
   const hasText = computed(() => text.value.trim().length > 0);
   const hasAttachments = computed(() => attachments.value.length > 0);
@@ -40,11 +42,8 @@ export const useDraftMessageStore = defineStore('draftMessage', () => {
     embedMessage.value = value;
   }
 
-  function setCachedMessage(): void {
-    cachedMessage.value = {
-      text: text.value,
-      embedMessageObject: embedMessage.value,
-    };
+  function setCachedMessage(value: CachedMessage | null = null): void {
+    cachedMessage.value = value;
   }
 
   function clear(): void {

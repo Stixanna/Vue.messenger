@@ -58,9 +58,14 @@ export function useSendMessage() {
       case 'edit':
         await sendEdit(text, embed);
 
-        const prevText = draftStore.cachedMessage?.text;
-        draftStore.setText(prevText ?? '');
-        draftStore.setEmbedMessage(null);
+        const cachedMessage = draftStore.cachedMessage;
+
+        if (cachedMessage) {
+          draftStore.setText(cachedMessage.text);
+          draftStore.setEmbedMessage(cachedMessage.embedMessageObject);
+        }
+
+        draftStore.setCachedMessage();
         break;
 
     }
