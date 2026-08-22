@@ -1,4 +1,4 @@
-import type { NotificationEvent } from '@/types/events';
+import type { EventPayload } from '@/types/events';
 
 const NOTIFICATION_TEXT = {
   title: 'Chatilka',
@@ -13,9 +13,9 @@ const NOTIFICATION_TEXT = {
  * Обрабатывает браузерное уведомление.
  */
 export async function processNotification(
-  data: NotificationEvent,
+  data: EventPayload,
 ): Promise<void> {
-  const title = data.type === 'message-min'
+  const title = data.action === 'message-min'
     ? NOTIFICATION_TEXT.body.new_message
     : NOTIFICATION_TEXT.body.new_notify;
 

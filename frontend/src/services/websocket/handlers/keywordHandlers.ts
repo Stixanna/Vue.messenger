@@ -2,6 +2,7 @@ import { normalizeDataPayload } from '@/services/websocket/normalizeDataPayload'
 
 import { useRoomsStore } from '@/stores/roomsStore'
 import { useKeywordsStore } from '@/stores/keywordsStore'
+import type { EventPayload } from '@/types/events'
 
 interface KeywordSetEventData {
   room_id: string
@@ -27,11 +28,6 @@ interface KeywordOrderEventData {
   order_num: number
 }
 
-interface WebSocketKeywordEvent {
-  action: string
-  data: Record<string, unknown>
-}
-
 /**
  * Маршрутизирует события ключевых слов по типу действия.
  *
@@ -39,7 +35,7 @@ interface WebSocketKeywordEvent {
  * WebSocket-события. Данные предварительно нормализуются,
  * после чего передаются соответствующему обработчику.
  */
-export function routeKwEvent(payload: WebSocketKeywordEvent): Record<string, unknown> {
+export function routeKwEvent(payload: EventPayload): Record<string, unknown> {
   const normalizedData = normalizeDataPayload(payload.data)
 
   switch (payload.action) {
@@ -92,7 +88,7 @@ function handleKwUnset(data: KeywordUnsetEventData): void {
 }
 
 function handleKwRename(data: KeywordRenameEventData): void {
-  const { room_id } = data
+  const { room_id, old_name, new_name } = data
 
   const keywordsStore = useKeywordsStore()
 

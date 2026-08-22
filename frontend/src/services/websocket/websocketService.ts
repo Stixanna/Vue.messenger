@@ -10,6 +10,7 @@ import {
 import { routeServerEvent } from './handlers/serverHandlers';
 import { routeTagEvent } from './handlers/tagHandlers';
 import { routeKwEvent } from './handlers/keywordHandlers';
+import type { EventPayload } from '@/types/events';
 
 const CONNECTION_STATE = {
   CONNECTED: 'connected',
@@ -19,10 +20,10 @@ const CONNECTION_STATE = {
 type ConnectionState =
   typeof CONNECTION_STATE[keyof typeof CONNECTION_STATE];
 
-interface WebSocketRequest {
+interface WebSocketRequest extends EventPayload {
   object: string;
   action: string;
-  data?: Record<string, unknown>;
+  data: Record<string, unknown>;
 }
 
 interface WebSocketData {

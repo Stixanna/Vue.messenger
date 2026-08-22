@@ -1,17 +1,20 @@
 import { useUsersStore } from '@/stores/usersStore';
-import type { 
-    StatusEvent,
-} from '@/types/events';
 
-
+interface StatusEventData {
+  id: string;
+  status: {
+    is_online: boolean;
+    timestamp: string;
+  };
+}
 
 interface StatusEventPayload {
   action: 'user-status';
-  data: StatusEvent;
+  data: StatusEventData;
 }
 
 type ActionHandler = (
-  payloadData: StatusEvent,
+  payloadData: StatusEventData,
 ) => Promise<boolean>;
 
 const actionHandlers: Record<
@@ -26,7 +29,7 @@ const userStatusTimers = new Map<string, ReturnType<typeof setTimeout>>();
 const userLastStatusEvent = new Map<
   string,
   {
-    user: StatusEvent;
+    user: StatusEventData;
     timestamp: number;
   }
 >();
@@ -63,7 +66,7 @@ export async function processStatusEvent(
  * Обрабатывает изменение статуса пользователя.
  */
 function handleUserStatus(
-  payloadData: StatusEvent,
+  payloadData: StatusEventData,
 ): Promise<boolean> {
   const updatingUser = payloadData;
   const userId = updatingUser.id;

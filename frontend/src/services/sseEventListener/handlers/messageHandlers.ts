@@ -3,6 +3,7 @@ import { useUsersStore } from '@/stores/usersStore';
 import { useRoomsStore } from '@/stores/roomsStore';
 import { loadMessageInfo } from '@/services/dataLoaders/loadMessageInfo';
 import type { RequestedMessage } from '@/types/messages';
+import type { EventPayload } from '@/types/events';
 
 type MessageAction =
   | 'message-min'
@@ -15,8 +16,7 @@ type MessageEventType =
   | 'message_update'
   | 'message_delete'
 
-interface MessageEventPayload {
-  action: string;
+interface MessageEventPayload extends EventPayload {
   data: {
     id: string;
     is_delayed?: boolean;

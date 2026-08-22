@@ -1,12 +1,8 @@
 import { processNotification } from '@/globalUIMethods/processNotification';
-
-interface NotificationEvent {
-  type: string;
-  data: Record<string, unknown>;
-}
+import type { EventPayload } from '@/types/events';
 
 export async function notifyIfRequired(
-  data: NotificationEvent,
+  data: EventPayload,
 ): Promise<void> {
   // Проверка активности вкладки
   if (!document.hasFocus()) {

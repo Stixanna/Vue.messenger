@@ -1,12 +1,9 @@
-export interface NotificationEvent {
+export interface DrySSEEvent {
   type: string;
   data: Record<string, unknown>;
 }
 
-export interface StatusEvent {
-  id: string;
-  status: {
-    is_online: boolean;
-    timestamp: string;
-  };
+export interface EventPayload {
+  action: string;
+  data: Record<string, unknown>;
 }

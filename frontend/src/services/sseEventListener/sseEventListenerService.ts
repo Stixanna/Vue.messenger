@@ -13,6 +13,7 @@ import { processRoomEvent } from './handlers/roomHandlers';
 import { processCallEvent } from './handlers/callHandlers';
 import { processStatusEvent } from './handlers/statusHandlers';
 import { processInviteEvent } from './handlers/inviteHandlers';
+import type { DrySSEEvent } from '@/types/events';
 
 const CONNECTION_STATE = {
   CONNECTED: 'connected',
@@ -43,7 +44,7 @@ type SSEEventType =
   | 'reaction-unset'
   | 'reaction-changed';
 
-interface SSEEvent {
+interface SSEEvent extends DrySSEEvent{
   type: SSEEventType;
   data: any;
 }
@@ -211,6 +212,11 @@ async function handleSSEData(
 ): Promise<void> {
   console.log('📨 Пришло сообщение SSE:', data);
 
+  const normalizedPayload = {
+    action: data.type,
+    data: data.data,
+  } 
+
   const notificatedEvents: SSEEventType[] = [
     'message-min',
     'invite',
@@ -219,7 +225,7 @@ async function handleSSEData(
 
   if (notificatedEvents.includes(data.type)) {
     if (data.type !== 'message-min') {
-      notifyIfRequired(data);
+      notifyIfRequired(normalizedPayload);
     }
   }
 

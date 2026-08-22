@@ -1,8 +1,7 @@
 import { normalizeDataPayload } from '@/services/websocket/normalizeDataPayload';
+import type { EventPayload } from '@/types/events';
 
-interface ServerEventPayload {
-  action: string;
-  data: Record<string, unknown>;
+interface ServerEventPayload extends EventPayload{
   status?: string;
 }
 

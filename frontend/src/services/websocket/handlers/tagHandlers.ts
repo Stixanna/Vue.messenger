@@ -3,6 +3,7 @@ import { updateRoomListWithData } from "@/utils/updateRoomListWithData";
 
 import { useRoomsStore } from "@/stores/roomsStore";
 import { useTagsStore } from "@/stores/tagsStore";
+import type { EventPayload } from "@/types/events";
 
 interface TagSetEventData {
   room_id: string;
@@ -38,11 +39,6 @@ interface TagOrderEventData {
   order_num: number;
 }
 
-interface WebSocketTagEvent {
-  action: string;
-  data: Record<string, unknown>;
-}
-
 /**
  * Маршрутизирует события тегов по типу действия.
  *
@@ -51,7 +47,7 @@ interface WebSocketTagEvent {
  * сужается до конкретного TagEvent.
  */
 export function routeTagEvent(
-    payload: WebSocketTagEvent,
+    payload: EventPayload,
 ): Record<string, unknown> {
   const normalizedData = normalizeDataPayload(
       payload.data,
