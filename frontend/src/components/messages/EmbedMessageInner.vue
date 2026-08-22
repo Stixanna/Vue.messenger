@@ -101,6 +101,19 @@ const hasAttachment = computed(() => {
 
 <style scoped>
 
+.bubble .embedded-message .embed-text-wrapper {
+  padding: 0.25rem 0.5rem;
+}
+
+.embed-text-wrapper .embed-text-text {
+  display: inline-block;
+  vertical-align: middle;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-height: calc(var(--font-size) + 2px);
+}
+
 .chat-input .embedded-message {
   position: relative;
   top: 0.5rem;

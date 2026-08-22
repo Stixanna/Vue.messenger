@@ -704,31 +704,6 @@
   justify-content: center;
 }
 
-/* Embedded message container */
-
-#embedded-message-container,
-#forwarded-container {
-  width: 100%;
-  display: flex;
-  pointer-events: auto;
-  user-select: none;
-}
-
-.bubble .embedded-message .embed-text-wrapper,
-.bubble .forwarded-container {
-  padding: 0.25rem 0.5rem;
-}
-
-.embed-text-wrapper .embed-text-text,
-.forwarded-container {
-  display: inline-block;
-  vertical-align: middle;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  min-height: calc(var(--font-size) + 2px);
-}
-
 .send-button-container,
 .btn-container-wrapper {
   cursor: pointer;

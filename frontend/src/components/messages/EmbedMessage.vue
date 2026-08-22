@@ -72,6 +72,14 @@ function handleClick() {
 </template>
 
 <style scoped>
+
+#embedded-message-container {
+  width: 100%;
+  display: flex;
+  pointer-events: auto;
+  user-select: none;
+}
+
 .bubble .embedded-message-container {
   --embed-height: 2.5rem;
   --border-size: .4rem;

@@ -49,6 +49,26 @@ function handleUsernameClick() {
 
 <style scoped>
 
+#forwarded-container {
+  width: 100%;
+  display: flex;
+  pointer-events: auto;
+  user-select: none;
+}
+
+.bubble .forwarded-container {
+  padding: 0.25rem 0.5rem;
+}
+
+.forwarded-container {
+  display: inline-block;
+  vertical-align: middle;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-height: calc(var(--font-size) + 2px);
+}
+
 .forwarded-container .btn-container,
 .forwarded-container span {
   pointer-events: none;
