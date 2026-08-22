@@ -144,3 +144,18 @@ export async function SendAttachmentMessage(
 		}
 	);
 }
+
+export async function DeleteMessage(
+	message_id: string,
+): Promise<null> {
+	const messageData: any = {
+        message_id:message_id,
+    };
+	return apiRequest(
+		`/message/delete/`,
+		{
+			method: 'DELETE',
+			body: messageData,
+		}
+	);
+}

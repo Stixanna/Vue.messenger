@@ -14,7 +14,9 @@ import { useContextMenuStore } from '@/stores/contextMenuStore';
 import { useRoomsStore } from '@/stores/roomsStore';
 import { useUsersStore } from '@/stores/usersStore';
 import { groupMessages } from '@/utils/messages/groupMessages';
+import { copyToClipboard } from "@/utils/copyToClipboard";
 import { menuText } from '@/constants/menuText';
+import { DeleteMessage } from '@/services/messageService';
 
 const props = defineProps({
   roomId: {
@@ -205,11 +207,11 @@ function handleMenuItemSelect(item) {
       break;
 
     case 'copy_message':
-      console.log('Copy message text:', selectedMessage.text);
+      copyToClipboard(selectedMessage.text)
       break;
 
     case 'delete_message':
-      console.log('Delete message:', selectedMessage);
+      DeleteMessage(selectedMessage.id)
       break;
 
   }
